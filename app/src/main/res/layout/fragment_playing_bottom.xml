@@ -1,0 +1,136 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context="fragment.PlayingBottomFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="swipe to switch fragment"
+        android:id="@+id/textView6"
+        android:background="#323232"
+        android:textAlignment="center"
+        android:paddingTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffff" />
+
+    <ImageButton
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:text="New Button"
+        android:id="@+id/setting"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/setting_icon"/>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="445dp"
+        android:id="@+id/listView"
+        android:layout_below="@+id/textView6"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/textView2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:background="#323232" />
+
+    <ImageButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:id="@+id/album"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/album"/>
+
+    <ImageButton
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:id="@+id/backward"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toEndOf="@+id/album"
+        android:background="@drawable/backward"/>
+
+    <ImageButton
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:id="@+id/play"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/backward"
+        android:background="@drawable/play" />
+
+    <ImageButton
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:id="@+id/forward"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/play"
+        android:background="@drawable/forward"/>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="600dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_above="@+id/backward"
+        android:layout_toEndOf="@+id/album"
+        android:indeterminate="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Song Name"
+        android:id="@+id/titleBot"
+        android:layout_below="@+id/progressBar"
+        android:layout_toEndOf="@+id/forward"
+        android:textColor="#fdfdfd"
+        android:textSize="16dp"
+        android:layout_marginLeft="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="singer"
+        android:id="@+id/singerBot"
+        android:textSize="16dp"
+        android:textColor="#ffffff"
+        android:layout_alignTop="@+id/titleBot"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="00 : 00"
+        android:id="@+id/timePlayed"
+        android:textColor="#ffffff"
+        android:textSize="16dp"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_alignEnd="@+id/titleBot"
+        android:layout_marginBottom="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text=" / 4:35"
+        android:id="@+id/songLength"
+        android:textSize="16dp"
+        android:textColor="#ffffff"
+        android:layout_alignBottom="@+id/textView2"
+        android:layout_toEndOf="@+id/timePlayed"
+        android:layout_marginBottom="5dp" />
+
+</RelativeLayout>

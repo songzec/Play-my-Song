@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${relativePackage}.${activityClass}" >
+
+<FrameLayout
+    android:id="@+id/content"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/bottomArea"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentRight="true"
+    android:background="#FFFFFF" >
+</FrameLayout>
+
+<RelativeLayout
+android:id="@+id/bottomArea"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_alignParentBottom="true"
+android:layout_alignParentLeft="true"
+    >
+
+<!-- tab的分割线 -->
+<ImageView
+    android:id="@+id/tabTop"
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#B6B6B6" />
+
+
+<!-- tab的四个按钮 -->
+<LinearLayout
+    android:id="@+id/tabLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/tabTop"
+    android:layout_marginTop="1dp"
+    android:gravity="center_horizontal"
+    android:orientation="horizontal" >
+
+    <!-- 微信按钮 -->
+    <!-- 使用FrameLayout，最主要的原因是使用它可以很容易的再添加一个消息提醒的小图片 -->
+    <FrameLayout
+        android:id="@+id/allMusicLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:paddingTop="3dp"
+        android:paddingBottom="2dp"
+        android:background="#0f6698">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All Music"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:textSize="13sp" />
+    </FrameLayout>
+
+    <!-- 联系人按钮 -->
+    <FrameLayout
+        android:id="@+id/recommendLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:paddingTop="3dp"
+        android:paddingBottom="2dp"
+        android:background="#535353">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recommend"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:textSize="13sp" />
+    </FrameLayout>
+
+    <!-- 发现按钮 -->
+    <FrameLayout
+        android:id="@+id/listLayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:paddingTop="3dp"
+        android:paddingBottom="2dp"
+        android:background="#535353">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="List"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:textSize="13sp" />
+    </FrameLayout>
+
+    <!-- 我按钮 -->
+    <FrameLayout
+        android:id="@+id/top20Layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="1"
+        android:paddingTop="3dp"
+        android:paddingBottom="2dp"
+        android:background="#535353">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Top 20"
+            android:textColor="#ffffff"
+            android:layout_gravity="center"
+            android:textSize="13sp" />
+    </FrameLayout>
+</LinearLayout>
+</RelativeLayout>
+
+    </RelativeLayout>

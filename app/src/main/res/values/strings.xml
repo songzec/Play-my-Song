@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">PlaymySong</string>
+    <string name="action_settings">Settings</string>
+    <string name="apname">Name</string>
+    <string name="appassword">Password</string>
+    <string name="apconfirmpassword">Confirm\nPassword</string>
+    <string name="apemail">Email</string>
+    <string name="apwhatsup">What\'s Up</string>
+    <string name="apok">OK</string>
+    <string name="apcancel">Cancel</string>
+    <string name="wlsongname1">1\.Song Name</string>
+    <string name="wlsongname2">2\.Song Name</string>
+    <string name="wlsongname3">3\.Song Name</string>
+    <string name="helptxt">Help Document</string>
+    <string name="helpback">Back</string>
+    <string name="fbsend">Send</string>
+    <string name="fbcancel">cancel</string>
+    <string name="fbtitle">Title</string>
+    <string name="fbcontent">Content</string>
+    <string name="fbemail">User Email</string>
+    <string name="apheader">Account Profile</string>
+    <string name="wlheader">Wish List</string>
+    <string name="helpheader">Help</string>
+    <string name="fbheader">Feedback</string>
+    <string name="settings">Settings</string>
+    <string name="rpheader">Recently Played</string>
+    <string name="mflheader">My Favorite List</string>
+</resources>
