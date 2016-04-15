@@ -31,9 +31,9 @@ public class AllMusicFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private Fragment titleFragment = new TitleFragment();
-    private Fragment singerFragment = new SingerFragment();
-    private Fragment albumFragment = new AlbumFragment();
+    private TitleFragment titleFragment = new TitleFragment();
+    private SingerFragment singerFragment = new SingerFragment();
+    private AlbumFragment albumFragment = new AlbumFragment();
     private ImageView settings;
     private View view;
     private FrameLayout titleLayout, singerLayout, albumLayout;

@@ -3,7 +3,7 @@ package com.example.chens.PlaymySong.entities;
 /**
  * Created by Songze Chen on 2016/4/14.
  */
-public class SongInfo {
+public abstract class SongInfo {
     private String title;
     private String singer;
     private String album;

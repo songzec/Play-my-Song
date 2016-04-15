@@ -19,10 +19,10 @@ import com.example.chens.PlaymySong.ui.main_page.all_music_page.AllMusicFragment
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
-    private Fragment allMusicFragment = new AllMusicFragment();
-    private Fragment recommendFragment = new RecommendFragment();
-    private Fragment listFragment = new ListFragment();
-    private Fragment top20Fragment = new Top20Fragment();
+    private AllMusicFragment allMusicFragment = new AllMusicFragment();
+    private RecommendFragment recommendFragment = new RecommendFragment();
+    private ListFragment listFragment = new ListFragment();
+    private Top20Fragment top20Fragment = new Top20Fragment();
 
     private FrameLayout allMusicLayout, recommendLayout, listLayout,
             top20Layout;

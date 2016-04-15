@@ -83,9 +83,7 @@
                 android:layout_height="@dimen/header_height_large"
                 android:id="@+id/settingsView"
                 android:src="@drawable/setting_icon"
-                android:layout_alignBottom="@+id/linearLayout"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true" />
+                android:contentDescription="@string/setting_icon" />
 
         </LinearLayout>
 
@@ -106,5 +104,5 @@
         android:layout_width="match_parent"
         android:layout_height="388dp"
         android:layout_gravity="center_horizontal|bottom"
-        android:id="@+id/subContent"></FrameLayout>
+        android:id="@+id/subContent"/>
 </FrameLayout>
