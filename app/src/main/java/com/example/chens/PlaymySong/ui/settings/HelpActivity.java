@@ -19,7 +19,7 @@ public class HelpActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.helppage);
+        setContentView(R.layout.settings_helpactivity);
         Button button = (Button) findViewById(R.id.helpbutton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

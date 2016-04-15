@@ -16,7 +16,7 @@ public class MyFavoriteListActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.myfavoritelistpage);
+        setContentView(R.layout.settings_myfavoritelistactivity);
         ImageButton imageButton=(ImageButton)findViewById(R.id.mflbutton);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override

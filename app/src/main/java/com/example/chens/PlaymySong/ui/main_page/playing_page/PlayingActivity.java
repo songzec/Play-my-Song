@@ -58,7 +58,7 @@ public class PlayingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_playing);
+        setContentView(R.layout.playingpage_playingactivity);
 
         // used for test, add all songs' names
         allSongs = new ArrayList<String>();
@@ -125,7 +125,7 @@ public class PlayingActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_playing, container, false);
+            View rootView = inflater.inflate(R.layout.playing_page_playingactivity, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText("default");
             return rootView;

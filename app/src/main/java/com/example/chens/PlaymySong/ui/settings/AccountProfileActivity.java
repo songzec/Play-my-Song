@@ -17,7 +17,7 @@ public class AccountProfileActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceActivity) {
         super.onCreate(savedInstanceActivity);
-        setContentView(R.layout.accountprofilepage);
+        setContentView(R.layout.settings_accountprofileactivity);
         Button ok = (Button) findViewById(R.id.apok);
         ok.setOnClickListener(new View.OnClickListener() {
             @Override

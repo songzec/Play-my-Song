@@ -18,7 +18,7 @@ public class WishListActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.wishlistpage);
+        setContentView(R.layout.settings_wishlistactivity);
         ImageButton button = (ImageButton) findViewById(R.id.wlbutton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

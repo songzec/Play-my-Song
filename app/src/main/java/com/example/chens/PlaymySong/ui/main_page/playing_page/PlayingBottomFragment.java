@@ -88,7 +88,7 @@ public class PlayingBottomFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        view = inflater.inflate(R.layout.fragment_playing_bottom, container, false);
+        view = inflater.inflate(R.layout.playing_page_playingbottomfragment, container, false);
 
         // initialize buttons
         setting = (ImageButton)view.findViewById(R.id.setting);

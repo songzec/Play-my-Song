@@ -8,11 +8,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import com.example.chens.PlaymySong.ui.main_page.list_fragment.ListFragment;
+import com.example.chens.PlaymySong.ui.main_page.list_page.ListFragment;
 import com.example.chens.PlaymySong.R;
-import com.example.chens.PlaymySong.ui.main_page.recommend_fragment.RecommendFragment;
-import com.example.chens.PlaymySong.ui.main_page.top20_fragment.Top20Fragment;
-import com.example.chens.PlaymySong.ui.main_page.all_music_fragment.AllMusicFragment;
+import com.example.chens.PlaymySong.ui.main_page.recommend_page.RecommendFragment;
+import com.example.chens.PlaymySong.ui.main_page.top20_page.Top20Fragment;
+import com.example.chens.PlaymySong.ui.main_page.all_music_page.AllMusicFragment;
+/**
+ * Created by Songze Chen on 2016/4/3.
+ */
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -27,7 +30,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_page_mainactivity);
 
         initView();
 

@@ -17,7 +17,7 @@ public class FeedbackActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceActivity) {
         super.onCreate(savedInstanceActivity);
-        setContentView(R.layout.feedbackpage);
+        setContentView(R.layout.settings_feedbackactivity);
         Button send = (Button) findViewById(R.id.fbsend);
         Button cancel = (Button) findViewById(R.id.fbcancel);
         send.setOnClickListener(new View.OnClickListener() {

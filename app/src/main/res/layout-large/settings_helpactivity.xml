@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/header_height_large"
+        android:layout_alignParentTop="true"
+        android:background="@color/gray"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:text="@string/helpheader"
+            android:textColor="@color/white"
+            android:textSize="@dimen/header_text_large" />
+    </RelativeLayout>
+    
+
+    <Button
+        android:id="@+id/helpbutton"
+        android:layout_width="@dimen/button_width_large"
+        android:layout_height="@dimen/button_height_large"
+        android:textSize="@dimen/text_large"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="61dp"
+        android:background="@color/gray"
+        android:text="@string/back"
+        android:textColor="@color/white" />
+
+    <TextView
+        android:id="@+id/helptxt"
+        android:textSize="@dimen/text_large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/helptxt"
+        android:textColor="@color/white"
+        android:layout_below="@+id/header"
+        android:layout_alignEnd="@+id/helpbutton"
+        android:layout_marginTop="92dp" />
+
+</RelativeLayout>

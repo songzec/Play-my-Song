@@ -20,10 +20,10 @@ import com.example.chens.PlaymySong.R;
  */
 public class SettingListFragment extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.settingpage, container, false);
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.settings_settingactivity, container, false);
         String[] datasource = {"Account Profile", "Switch Account/Login", "Recently Played", "Wish List",
                                 "My Favorite List", "Help", "Feedback", "Back to Play my Song",  "Exit"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.settingrow, R.id.txtitem, datasource);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.settings_settinglistfragment, R.id.txtitem, datasource);
         setListAdapter(adapter);
         setRetainInstance(true);
         return rootView;

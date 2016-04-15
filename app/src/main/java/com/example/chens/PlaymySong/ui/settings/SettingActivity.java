@@ -15,7 +15,7 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.settingpage);
+        setContentView(R.layout.settings_settingactivity);
         SettingListFragment lstFragment = (SettingListFragment) getSupportFragmentManager().findFragmentByTag("listFragment");
         if (lstFragment == null) {
             lstFragment = new SettingListFragment();

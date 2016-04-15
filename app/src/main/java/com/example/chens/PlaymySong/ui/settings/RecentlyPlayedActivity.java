@@ -15,7 +15,7 @@ public class RecentlyPlayedActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.recentlyplayedpage);
+        setContentView(R.layout.settings_recentlyplayedactivity);
 
         ImageButton imageButton=(ImageButton)findViewById(R.id.rpbutton);
         imageButton.setOnClickListener(new View.OnClickListener() {

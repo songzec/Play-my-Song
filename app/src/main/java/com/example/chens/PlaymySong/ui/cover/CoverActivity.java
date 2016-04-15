@@ -8,13 +8,15 @@ import android.widget.Button;
 
 import com.example.chens.PlaymySong.ui.main_page.MainActivity;
 import com.example.chens.PlaymySong.R;
-
+/**
+ * Created by Songze Chen on 2016/4/3.
+ */
 public class CoverActivity extends AppCompatActivity {
     private Button loginButton, signUpButton, justPlayButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cover);
+        setContentView(R.layout.cover_coveractivity);
 
         loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new Button.OnClickListener() {
