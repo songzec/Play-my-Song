@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.chens.PlaymySong.entities.Song;
@@ -20,6 +21,7 @@ public class MyLocalDB {
     private final String wishListTableName = "WishListTable";
     private final String titleAndArtist = "title_artist";
     private final String album = "album";
+    private final String rawSourceID = "rawSourceID";
     private SQLiteDatabase database;
 
     public MyLocalDB(Context context) {
@@ -30,83 +32,112 @@ public class MyLocalDB {
 
     ///////////////////////// CRUD method begin /////////////////////////////
     public void addToFavoriteList(Song song) {
+        try {
+            deleteFromFavoriteList(song.getTitle(), song.getArtist());
+        } catch (SQLiteException e) {
+            // do nothing
+        }
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndArtist, song.getTitle() + "+" + song.getArtist());
+        newRecords.put(titleAndArtist, song.getTitle() + " - " + song.getArtist());
         newRecords.put(album, song.getAlbum());
+        newRecords.put(rawSourceID, song.getRawSourceID());
         open();
         database.insert(favoriteListTableName, null, newRecords);
         close();
     }
 
     public void addToPlayList(Song song) {
+        try {
+            deleteFromPlayList(song.getTitle(), song.getArtist());
+        } catch (SQLiteException e) {
+            // do nothing
+        }
+
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndArtist, song.getTitle() + "+" + song.getArtist());
+        newRecords.put(titleAndArtist, song.getTitle() + " - " + song.getArtist());
         newRecords.put(album, song.getAlbum());
+        newRecords.put(rawSourceID, song.getRawSourceID());
         open();
         database.insert(playListTableName, null, newRecords);
         close();
     }
 
     public void addToRecentPlayList(Song song) {
+        deleteFromRecentPlayList(song.getTitle(), song.getArtist());
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndArtist, song.getTitle() + "+" + song.getArtist());
+        newRecords.put(titleAndArtist, song.getTitle() + " - " + song.getArtist());
         newRecords.put(album, song.getAlbum());
+        newRecords.put(rawSourceID, song.getRawSourceID());
         open();
         database.insert(recentPlayListTableName, null, newRecords);
         close();
     }
 
     public void addToWishList(Song song) {
+        deleteFromWishList(song.getTitle(), song.getArtist());
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndArtist, song.getTitle() + "+" + song.getArtist());
+        newRecords.put(titleAndArtist, song.getTitle() + " - " + song.getArtist());
         newRecords.put(album, song.getAlbum());
+        newRecords.put(rawSourceID, song.getRawSourceID());
         open();
         database.insert(wishListTableName, null, newRecords);
         close();
     }
 
-    public void deleteFromFavoriteList(String title, String singer) {
+    public void deleteFromFavoriteList(String title, String artist) {
         open();
-        database.delete(favoriteListTableName, titleAndArtist + "=" + title + "+" + singer, null);
+        database.delete(favoriteListTableName, titleAndArtist + "=" + title + " - " + artist, null);
         close();
     }
 
-    public void deleteFromPlayList(String title, String singer) {
+    public void deleteFromPlayList(String title, String artist) {
         open();
-        database.delete(playListTableName, titleAndArtist + "=" + title + "+" + singer, null);
+        database.delete(playListTableName, titleAndArtist + "=" + title + " - " + artist, null);
         close();
     }
 
-    public void deleteFromRecentPlayList(String title, String singer) {
+    public void deleteFromRecentPlayList(String title, String artist) {
         open();
-        database.delete(recentPlayListTableName, titleAndArtist + "=" + title + "+" + singer, null);
+        database.delete(recentPlayListTableName, titleAndArtist + "=" + title + " - " + artist, null);
         close();
     }
 
-    public void deleteFromWishList(String title, String singer) {
+    public void deleteFromWishList(String title, String artist) {
         open();
-        database.delete(wishListTableName, titleAndArtist + "=" + title + "+" + singer, null);
+        database.delete(wishListTableName, titleAndArtist + "=" + title + " - " + artist, null);
         close();
     }
 
     public Cursor getFavoriteListAll() {
-        return database.query(favoriteListTableName, new String[]{titleAndArtist, album},
-                null, null, null, null, null);
+        return database.query(favoriteListTableName, null, null, null, null, null, null);
     }
 
     public Cursor getPlayListAll() {
-        return database.query(playListTableName, new String[]{titleAndArtist, album},
-                null, null, null, null, null);
+        return database.query(playListTableName, null, null, null, null, null, null);
     }
 
     public Cursor getRecentPlayListAll() {
-        return database.query(recentPlayListTableName, new String[]{titleAndArtist, album},
-                null, null, null, null, null);
+        return database.query(recentPlayListTableName, null, null, null, null, null, null);
     }
 
     public Cursor getWishListAll() {
-        return database.query(wishListTableName, new String[]{titleAndArtist, album},
-                null, null, null, null, null);
+        return database.query(wishListTableName, null, null, null, null, null, null);
+    }
+
+    public Cursor getFavoriteListOne(String title, String artist) {
+        return database.query(favoriteListTableName, null, titleAndArtist + "='" + title + " - " + artist + "'", null, null, null, null);
+    }
+
+    public Cursor getPlayListOne(String title, String artist) {
+        return database.query(playListTableName, null, titleAndArtist + "='" + title + " - " + artist + "'", null, null, null, null);
+    }
+
+    public Cursor getRecentPlayListOne(String title, String artist) {
+        return database.query(recentPlayListTableName, null, titleAndArtist + "='" + title + " - " + artist + "'", null, null, null, null);
+    }
+
+    public Cursor getWishListOne(String title, String artist) {
+        return database.query(wishListTableName, null, titleAndArtist + "='" + title + " - " + artist + "'", null, null, null, null);
     }
     ///////////////////////// CRUD method end /////////////////////////////
 
@@ -127,24 +158,29 @@ public class MyLocalDB {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            String createQuery = null;
+
+            String createQuery = null, deleteQuery = null;
             createQuery = "CREATE TABLE IF NOT EXISTS " + favoriteListTableName + " ("
                     + titleAndArtist + " TEXT PRIMARY KEY,"
+                    + rawSourceID + " INTEGER,"
                     + album + " TEXT);";
             db.execSQL(createQuery);
 
-            createQuery = "CREATE TABLE IF NOT EXISTS " + playListTableName + " ("
+            createQuery = "CREATE TABLE " + playListTableName + " ("
                     + titleAndArtist + " TEXT PRIMARY KEY,"
+                    + rawSourceID + " INTEGER,"
                     + album + " TEXT);";
             db.execSQL(createQuery);
 
             createQuery = "CREATE TABLE IF NOT EXISTS " + recentPlayListTableName + " ("
                     + titleAndArtist + " TEXT PRIMARY KEY,"
+                    + rawSourceID + " INTEGER,"
                     + album + " TEXT);";
             db.execSQL(createQuery);
 
             createQuery = "CREATE TABLE IF NOT EXISTS " + wishListTableName + " ("
                     + titleAndArtist + " TEXT PRIMARY KEY,"
+                    + rawSourceID + " INTEGER,"
                     + album + " TEXT);";
             db.execSQL(createQuery);
         }

@@ -102,7 +102,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/artist"
-        android:id="@+id/singerBot"
+        android:id="@+id/artistBot"
         android:textSize="16sp"
         android:textColor="@color/white"
         android:layout_alignTop="@+id/titleBot"

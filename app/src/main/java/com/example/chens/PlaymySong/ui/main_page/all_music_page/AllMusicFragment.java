@@ -106,13 +106,14 @@ public class AllMusicFragment extends Fragment {
                     ArrayList<String> songList = new ArrayList<String>();
                     for (Field field : fields) {
                         AssetFileDescriptor afd;
-                        afd = getResources().openRawResourceFd(field.getInt(null));
+                        int rawSourceID = field.getInt(null);
+                        afd = getResources().openRawResourceFd(rawSourceID);
                         mmr = new MediaMetadataRetriever();
                         mmr.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
                         String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
                         String artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
                         String album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
-                        Song song = new Song(title, artist, album);
+                        Song song = new Song(title, artist, album, rawSourceID);
                         songList.add(title + " - " + artist);
                         db.addToPlayList(song);
                     }

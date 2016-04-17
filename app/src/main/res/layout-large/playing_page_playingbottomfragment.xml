@@ -105,7 +105,7 @@
         android:id="@+id/singerBot"
         android:textSize="20sp"
         android:textColor="@color/white"
-        android:layout_alignTop="@+id/titleBot"
+        android:layout_alignTop="@+id/artistBot"
         android:layout_alignParentEnd="true" />
 
     <TextView

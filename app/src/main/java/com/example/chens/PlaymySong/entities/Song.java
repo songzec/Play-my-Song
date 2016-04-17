@@ -5,9 +5,10 @@ package com.example.chens.PlaymySong.entities;
  */
 public class Song extends SongInfo implements updateMySong {
 
-    public Song(String title, String artist, String album) {
+    public Song(String title, String artist, String album, int rawSourceID) {
         setTitle(title);
         setArtist(artist);
         setAlbum(album);
+        setRawSourceID(rawSourceID);
     }
 }

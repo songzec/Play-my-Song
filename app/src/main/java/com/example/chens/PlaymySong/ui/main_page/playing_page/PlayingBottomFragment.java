@@ -1,7 +1,10 @@
 package com.example.chens.PlaymySong.ui.main_page.playing_page;
 
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,10 +16,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.chens.PlaymySong.DBLayout.MyLocalDB;
 import com.example.chens.PlaymySong.R;
 import com.example.chens.PlaymySong.ui.settings.SettingActivity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -33,10 +39,10 @@ public class PlayingBottomFragment extends Fragment {
     private static final String ALL_SONGS = "allSongs";
 
     private View view;
-
+    private Toast toast;
     // save all songs name
     private ArrayList<String> allSongs;
-
+    MediaPlayer mediaPlayer = null;
     // all buttons
     private ImageButton setting;
     private ImageButton album;
@@ -48,13 +54,12 @@ public class PlayingBottomFragment extends Fragment {
     private TextView timePlayed;
     private TextView songLength;
     private TextView titleBot;
-    private TextView singerBot;
+    private TextView artistBot;
     private ListView listView;
-
 
     private OnFragmentInteractionListener mListener;
 
-
+    private Cursor cursor;
     public PlayingBottomFragment() {
         // Required empty public constructor
     }
@@ -85,7 +90,7 @@ public class PlayingBottomFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.playing_page_playingbottomfragment, container, false);
@@ -101,7 +106,7 @@ public class PlayingBottomFragment extends Fragment {
         timePlayed = (TextView)view.findViewById(R.id.timePlayed);
         songLength = (TextView)view.findViewById(R.id.songLength);
         titleBot = (TextView)view.findViewById(R.id.titleBot);
-        singerBot = (TextView)view.findViewById(R.id.singerBot);
+        artistBot = (TextView)view.findViewById(R.id.artistBot);
 
         // initialize list view
         listView = (ListView)view.findViewById(R.id.listView);
@@ -130,6 +135,22 @@ public class PlayingBottomFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView v = (TextView) view;
+                String titleAndArtist = v.getText().toString();
+                String title = titleAndArtist.split(" - ")[0];
+                String artist = titleAndArtist.split(" - ")[1];
+                MyLocalDB db = new MyLocalDB(getContext());
+
+                db.open();
+                cursor = db.getPlayListAll();
+                System.out.println(cursor.getCount());
+                cursor.moveToNext();
+                System.out.println(cursor.getCount());
+                while (!cursor.getString(0).equals(titleAndArtist)) {
+                    cursor.moveToNext();
+                }
+                System.out.println(cursor.getCount());
+                playMusic();
 
             }
         });
@@ -188,7 +209,16 @@ public class PlayingBottomFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+            if (cursor != null) {
+                sendToast(String.valueOf(cursor.getCount()));
+                if (cursor.isFirst()) {
+                    cursor.moveToLast();
+                } else {
+                    cursor.moveToPrevious();
 
+                }
+                playMusic();
+            }
         }
     };
 
@@ -196,7 +226,13 @@ public class PlayingBottomFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-
+            if (mediaPlayer.isPlaying()) {
+                play.setImageResource(R.drawable.play);
+                mediaPlayer.pause();
+            } else {
+                play.setImageResource(R.drawable.setting_icon);
+                mediaPlayer.start();
+            }
         }
     };
 
@@ -204,10 +240,52 @@ public class PlayingBottomFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-
+            if (cursor != null) {
+                sendToast(String.valueOf(cursor.getCount()));
+                if (cursor.isLast()) {
+                    cursor.moveToFirst();
+                } else {
+                    cursor.moveToNext();
+                }
+                playMusic();
+            }
         }
     };
 
+    private void sendToast(String s) {
 
+        if (toast == null){
+            toast = Toast.makeText(getContext(), s, Toast.LENGTH_SHORT);
+        }
 
+        toast.setText(s);
+        toast.setDuration(Toast.LENGTH_SHORT);
+        toast.show();
+    }
+    private void playMusic() {
+        String titleAndArtist = cursor.getString(0);
+        System.out.println(titleAndArtist);
+        String title = titleAndArtist.split(" - ")[0];
+        String artist = titleAndArtist.split(" - ")[1];
+        sendToast("playing " + titleAndArtist);
+        titleBot.setText(title);
+        artistBot.setText(artist);
+
+        int rawSourceID = Integer.parseInt(cursor.getString(1));
+        AssetFileDescriptor afd;
+        afd = getResources().openRawResourceFd(rawSourceID);
+
+        if (mediaPlayer != null) {
+            mediaPlayer.release();
+        }
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            afd.close();
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -9,6 +9,8 @@ public abstract class SongInfo {
     private String album;
     private String lyric;
     private Comments comments;
+    private int rawSourceID;
+
 
 
     public String getTitle() {
@@ -49,5 +51,13 @@ public abstract class SongInfo {
 
     public void setComments(Comments comments) {
         this.comments = comments;
+    }
+
+    public int getRawSourceID() {
+        return rawSourceID;
+    }
+
+    public void setRawSourceID(int rawSourceID) {
+        this.rawSourceID = rawSourceID;
     }
 }
