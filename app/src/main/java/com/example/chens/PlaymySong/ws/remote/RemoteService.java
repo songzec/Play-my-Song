@@ -9,10 +9,7 @@ import android.widget.Toast;
 
 import com.example.chens.PlaymySong.DBLayout.MyLocalDB;
 import com.example.chens.PlaymySong.entities.Song;
-import com.example.chens.PlaymySong.ws.ListName;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -60,7 +57,7 @@ public class RemoteService extends Service {
                 builder.append("userID=" + userID);
                 builder.append("&listName=" + listName);
                 builder.append("&title=" + song.getTitle());
-                builder.append("&singer=" + song.getSinger());
+                builder.append("&singer=" + song.getArtist());
                 builder.append("&album=" + song.getAlbum());
 
                 URL url = new URL(builder.toString());
@@ -94,7 +91,7 @@ public class RemoteService extends Service {
                 builder.append("userID=" + userID);
                 builder.append("&listName=" + listName);
                 builder.append("&title=" + song.getTitle());
-                builder.append("&singer=" + song.getSinger());
+                builder.append("&singer=" + song.getArtist());
 
                 URL url = new URL(builder.toString());
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();

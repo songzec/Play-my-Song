@@ -7,6 +7,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.chens.PlaymySong.entities.Song;
+
 /**
  * Created by Songze Chen on 2016/4/14.
  */
@@ -16,7 +18,7 @@ public class MyLocalDB {
     private final String playListTableName = "PlayListTable";
     private final String recentPlayListTableName = "RecentPlayListTable";
     private final String wishListTableName = "WishListTable";
-    private final String titleAndSinger = "title_singer";
+    private final String titleAndArtist = "title_artist";
     private final String album = "album";
     private SQLiteDatabase database;
 
@@ -27,37 +29,37 @@ public class MyLocalDB {
     }
 
     ///////////////////////// CRUD method begin /////////////////////////////
-    public void addToFavoriteList(String title, String singer, String albumName) {
+    public void addToFavoriteList(Song song) {
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndSinger, title + "+" + singer);
-        newRecords.put(album, albumName);
+        newRecords.put(titleAndArtist, song.getTitle() + "+" + song.getArtist());
+        newRecords.put(album, song.getAlbum());
         open();
         database.insert(favoriteListTableName, null, newRecords);
         close();
     }
 
-    public void addToPlayList(String title, String singer, String albumName) {
+    public void addToPlayList(Song song) {
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndSinger, title + "+" + singer);
-        newRecords.put(album, albumName);
+        newRecords.put(titleAndArtist, song.getTitle() + "+" + song.getArtist());
+        newRecords.put(album, song.getAlbum());
         open();
         database.insert(playListTableName, null, newRecords);
         close();
     }
 
-    public void addToRecentPlayList(String title, String singer, String albumName) {
+    public void addToRecentPlayList(Song song) {
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndSinger, title + "+" + singer);
-        newRecords.put(album, albumName);
+        newRecords.put(titleAndArtist, song.getTitle() + "+" + song.getArtist());
+        newRecords.put(album, song.getAlbum());
         open();
         database.insert(recentPlayListTableName, null, newRecords);
         close();
     }
 
-    public void addToWishList(String title, String singer, String albumName) {
+    public void addToWishList(Song song) {
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndSinger, title + "+" + singer);
-        newRecords.put(album, albumName);
+        newRecords.put(titleAndArtist, song.getTitle() + "+" + song.getArtist());
+        newRecords.put(album, song.getAlbum());
         open();
         database.insert(wishListTableName, null, newRecords);
         close();
@@ -65,45 +67,45 @@ public class MyLocalDB {
 
     public void deleteFromFavoriteList(String title, String singer) {
         open();
-        database.delete(favoriteListTableName, titleAndSinger + "=" + title + "+" + singer, null);
+        database.delete(favoriteListTableName, titleAndArtist + "=" + title + "+" + singer, null);
         close();
     }
 
     public void deleteFromPlayList(String title, String singer) {
         open();
-        database.delete(playListTableName, titleAndSinger + "=" + title + "+" + singer, null);
+        database.delete(playListTableName, titleAndArtist + "=" + title + "+" + singer, null);
         close();
     }
 
     public void deleteFromRecentPlayList(String title, String singer) {
         open();
-        database.delete(recentPlayListTableName, titleAndSinger + "=" + title + "+" + singer, null);
+        database.delete(recentPlayListTableName, titleAndArtist + "=" + title + "+" + singer, null);
         close();
     }
 
     public void deleteFromWishList(String title, String singer) {
         open();
-        database.delete(wishListTableName, titleAndSinger + "=" + title + "+" + singer, null);
+        database.delete(wishListTableName, titleAndArtist + "=" + title + "+" + singer, null);
         close();
     }
 
     public Cursor getFavoriteListAll() {
-        return database.query(favoriteListTableName, new String[]{titleAndSinger, album},
+        return database.query(favoriteListTableName, new String[]{titleAndArtist, album},
                 null, null, null, null, null);
     }
 
     public Cursor getPlayListAll() {
-        return database.query(playListTableName, new String[]{titleAndSinger, album},
+        return database.query(playListTableName, new String[]{titleAndArtist, album},
                 null, null, null, null, null);
     }
 
     public Cursor getRecentPlayListAll() {
-        return database.query(recentPlayListTableName, new String[]{titleAndSinger, album},
+        return database.query(recentPlayListTableName, new String[]{titleAndArtist, album},
                 null, null, null, null, null);
     }
 
     public Cursor getWishListAll() {
-        return database.query(wishListTableName, new String[]{titleAndSinger, album},
+        return database.query(wishListTableName, new String[]{titleAndArtist, album},
                 null, null, null, null, null);
     }
     ///////////////////////// CRUD method end /////////////////////////////
@@ -127,22 +129,22 @@ public class MyLocalDB {
         public void onCreate(SQLiteDatabase db) {
             String createQuery = null;
             createQuery = "CREATE TABLE IF NOT EXISTS " + favoriteListTableName + " ("
-                    + titleAndSinger + " TEXT PRIMARY KEY,"
+                    + titleAndArtist + " TEXT PRIMARY KEY,"
                     + album + " TEXT);";
             db.execSQL(createQuery);
 
             createQuery = "CREATE TABLE IF NOT EXISTS " + playListTableName + " ("
-                    + titleAndSinger + " TEXT PRIMARY KEY,"
+                    + titleAndArtist + " TEXT PRIMARY KEY,"
                     + album + " TEXT);";
             db.execSQL(createQuery);
 
             createQuery = "CREATE TABLE IF NOT EXISTS " + recentPlayListTableName + " ("
-                    + titleAndSinger + " TEXT PRIMARY KEY,"
+                    + titleAndArtist + " TEXT PRIMARY KEY,"
                     + album + " TEXT);";
             db.execSQL(createQuery);
 
             createQuery = "CREATE TABLE IF NOT EXISTS " + wishListTableName + " ("
-                    + titleAndSinger + " TEXT PRIMARY KEY,"
+                    + titleAndArtist + " TEXT PRIMARY KEY,"
                     + album + " TEXT);";
             db.execSQL(createQuery);
         }

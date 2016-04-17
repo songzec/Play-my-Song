@@ -2,6 +2,8 @@ package com.example.chens.PlaymySong.ui.main_page.all_music_page;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -10,9 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.chens.PlaymySong.DBLayout.MyLocalDB;
 import com.example.chens.PlaymySong.R;
+import com.example.chens.PlaymySong.entities.Song;
+import com.example.chens.PlaymySong.ui.main_page.CustomNames;
+import com.example.chens.PlaymySong.ui.main_page.playing_page.PlayingActivity;
 import com.example.chens.PlaymySong.ui.settings.SettingActivity;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 /**
  * Created by Songze Chen on 2016/4/3.
  */
@@ -32,9 +42,12 @@ public class AllMusicFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     private TitleFragment titleFragment = new TitleFragment();
-    private SingerFragment singerFragment = new SingerFragment();
+    private ArtistFragment artistFragment = new ArtistFragment();
     private AlbumFragment albumFragment = new AlbumFragment();
     private ImageView settings;
+    private TextView importMySongs;
+    private MediaMetadataRetriever mmr;
+    private ArrayList<Song> songs;
     private View view;
     private FrameLayout titleLayout, singerLayout, albumLayout;
 
@@ -77,12 +90,43 @@ public class AllMusicFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.all_music_page_allmusicfragment, container, false);
 
         initFragment();
+        importMySongs = (TextView) view.findViewById(R.id.import_my_songs);
+        importMySongs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
 
+                    Field[] fields = R.raw.class.getFields();
+                    MyLocalDB db = new MyLocalDB(getContext());
+                    ArrayList<String> songList = new ArrayList<String>();
+                    for (Field field : fields) {
+                        AssetFileDescriptor afd;
+                        afd = getResources().openRawResourceFd(field.getInt(null));
+                        mmr = new MediaMetadataRetriever();
+                        mmr.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                        String title = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
+                        String artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
+                        String album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
+                        Song song = new Song(title, artist, album);
+                        songList.add(title + " - " + artist);
+                        db.addToPlayList(song);
+                    }
+                    Bundle myBundle = new Bundle();
+                    myBundle.putSerializable(CustomNames.SONG_LIST, songList);
+                    Intent intent = new Intent();
+                    intent.setClass(v.getContext(), PlayingActivity.class);
+                    intent.putExtras(myBundle);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
         settings = (ImageView) view.findViewById(R.id.settingsView);
         settings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -101,8 +145,8 @@ public class AllMusicFragment extends Fragment {
 
             fragmentTransaction.add(R.id.subContent, titleFragment);
         }
-        if (!singerFragment.isAdded()) {
-            fragmentTransaction.add(R.id.subContent, singerFragment);
+        if (!artistFragment.isAdded()) {
+            fragmentTransaction.add(R.id.subContent, artistFragment);
         }
         if (!albumFragment.isAdded()) {
             fragmentTransaction.add(R.id.subContent, albumFragment);
@@ -151,11 +195,11 @@ public class AllMusicFragment extends Fragment {
             }
         });
 
-        FrameLayout singer = (FrameLayout) getActivity().findViewById(R.id.singer);
+        FrameLayout singer = (FrameLayout) getActivity().findViewById(R.id.artist);
         singer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showThisFragment(singerFragment);
+                showThisFragment(artistFragment);
             }
         });
 
@@ -171,7 +215,7 @@ public class AllMusicFragment extends Fragment {
     private void showThisFragment(Fragment thisFragment) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.hide(titleFragment);
-        fragmentTransaction.hide(singerFragment);
+        fragmentTransaction.hide(artistFragment);
         fragmentTransaction.hide(albumFragment);
         fragmentTransaction.show(thisFragment);
         fragmentTransaction.commit();

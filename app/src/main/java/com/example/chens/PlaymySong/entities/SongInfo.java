@@ -5,7 +5,7 @@ package com.example.chens.PlaymySong.entities;
  */
 public abstract class SongInfo {
     private String title;
-    private String singer;
+    private String artist;
     private String album;
     private String lyric;
     private Comments comments;
@@ -19,12 +19,12 @@ public abstract class SongInfo {
         this.title = title;
     }
 
-    public String getSinger() {
-        return singer;
+    public String getArtist() {
+        return artist;
     }
 
-    public void setSinger(String singer) {
-        this.singer = singer;
+    public void setArtist(String artist) {
+        this.artist = artist;
     }
 
     public String getAlbum() {

@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.chens.PlaymySong.DBLayout.MyLocalDB;
 import com.example.chens.PlaymySong.R;
+import com.example.chens.PlaymySong.ui.main_page.CustomNames;
 
 import java.util.ArrayList;
 
@@ -61,23 +63,24 @@ public class PlayingActivity extends AppCompatActivity {
         setContentView(R.layout.playingpage_playingactivity);
 
         // used for test, add all songs' names
-        allSongs = new ArrayList<String>();
-        allSongs.add("Hello");
-        allSongs.add("Billy Brown");
-        allSongs.add("Born This Way");
-        allSongs.add("Count On Me");
-        allSongs.add("Grenade");
-        allSongs.add("Happy Ending");
-        allSongs.add("Heartbreak Hotel");
-        allSongs.add("I Knew You Were Trouble");
-        allSongs.add("Lemon Tree");
-        allSongs.add("No Matter");
-        allSongs.add("Runaway Baby");
-        allSongs.add("Sorry");
-        allSongs.add("Stay With Me");
-        allSongs.add("Stronger");
-        allSongs.add("Until You");
-
+//        allSongs = new ArrayList<String>();
+//        allSongs.add("Hello");
+//        allSongs.add("Billy Brown");
+//        allSongs.add("Born This Way");
+//        allSongs.add("Count On Me");
+//        allSongs.add("Grenade");
+//        allSongs.add("Happy Ending");
+//        allSongs.add("Heartbreak Hotel");
+//        allSongs.add("I Knew You Were Trouble");
+//        allSongs.add("Lemon Tree");
+//        allSongs.add("No Matter");
+//        allSongs.add("Runaway Baby");
+//        allSongs.add("Sorry");
+//        allSongs.add("Stay With Me");
+//        allSongs.add("Stronger");
+//        allSongs.add("Until You");
+        Bundle bundle= getIntent().getExtras();
+        allSongs = (ArrayList)bundle.getSerializable(CustomNames.SONG_LIST);
         // put all fragments in the list
         fragments = new ArrayList<Fragment>();
         fragments.add(PlayingBottomFragment.newInstance(allSongs));
@@ -92,8 +95,7 @@ public class PlayingActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-
-
+        
     }
 
 

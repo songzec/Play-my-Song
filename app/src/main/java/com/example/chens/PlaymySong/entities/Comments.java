@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Comments {
     private String title;
-    private String singer;
+    private String artist;
     private ArrayList<SingleComment> singleComment;
 
     public String getTitle() {
@@ -18,12 +18,12 @@ public class Comments {
         this.title = title;
     }
 
-    public String getSinger() {
-        return singer;
+    public String getArtist() {
+        return artist;
     }
 
-    public void setSinger(String singer) {
-        this.singer = singer;
+    public void setArtist(String artist) {
+        this.artist = artist;
     }
 
     public ArrayList<SingleComment> getSingleComment() {

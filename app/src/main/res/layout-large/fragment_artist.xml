@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main_page.all_music_page.SingerFragment">
+    tools:context=".ui.main_page.all_music_page.ArtistFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -10,7 +10,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/singer_fragment"
+        android:text="@string/artist_fragment"
+        android:textSize="@dimen/text_large"
         android:id="@+id/textView9"
         android:layout_gravity="center"
         android:textColor="@color/white" />

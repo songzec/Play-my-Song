@@ -55,22 +55,22 @@ public class LocalService extends Service {
         switch (listName) {
             case ListName.FAVORITELIST:
                 for (Song song : titleSingerAlbum) {
-                    myLocalDB.addToFavoriteList(song.getTitle(), song.getSinger(), song.getAlbum());
+                    myLocalDB.addToFavoriteList(song);
                 }
                 break;
             case ListName.PLAYLIST:
                 for (Song song : titleSingerAlbum) {
-                    myLocalDB.addToPlayList(song.getTitle(), song.getSinger(), song.getAlbum());
+                    myLocalDB.addToPlayList(song);
                 }
                 break;
             case ListName.RECENTPLAYLIST:
                 for (Song song : titleSingerAlbum) {
-                    myLocalDB.addToRecentPlayList(song.getTitle(), song.getSinger(), song.getAlbum());
+                    myLocalDB.addToRecentPlayList(song);
                 }
                 break;
             case ListName.WISHLIST:
                 for (Song song : titleSingerAlbum) {
-                    myLocalDB.addToWishList(song.getTitle(), song.getSinger(), song.getAlbum());
+                    myLocalDB.addToWishList(song);
                 }
                 break;
         }
@@ -84,16 +84,16 @@ public class LocalService extends Service {
     public void deleteFromList(String listName, Song song) {
         switch (listName) {
             case ListName.FAVORITELIST:
-                myLocalDB.deleteFromFavoriteList(song.getTitle(), song.getSinger());
+                myLocalDB.deleteFromFavoriteList(song.getTitle(), song.getArtist());
                 break;
             case ListName.PLAYLIST:
-                myLocalDB.deleteFromPlayList(song.getTitle(), song.getSinger());
+                myLocalDB.deleteFromPlayList(song.getTitle(), song.getArtist());
                 break;
             case ListName.RECENTPLAYLIST:
-                myLocalDB.deleteFromRecentPlayList(song.getTitle(), song.getSinger());
+                myLocalDB.deleteFromRecentPlayList(song.getTitle(), song.getArtist());
                 break;
             case ListName.WISHLIST:
-                myLocalDB.deleteFromWishList(song.getTitle(), song.getSinger());
+                myLocalDB.deleteFromWishList(song.getTitle(), song.getArtist());
                 break;
         }
     }

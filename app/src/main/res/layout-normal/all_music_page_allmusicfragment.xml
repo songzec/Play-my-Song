@@ -43,7 +43,7 @@
             </FrameLayout>
 
             <FrameLayout
-                android:id="@+id/singer"
+                android:id="@+id/artist"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -54,7 +54,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/singer"
+                    android:text="@string/artist"
                     android:textColor="@color/white"
                     android:layout_gravity="center"
                     android:textSize="13sp" />
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/import_my_songs"
-            android:id="@+id/textView"
+            android:id="@+id/import_my_songs"
             android:layout_marginTop="34dp"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true"
