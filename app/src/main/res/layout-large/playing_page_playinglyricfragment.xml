@@ -32,7 +32,7 @@
         android:layout_height="70dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/song_name"
-        android:id="@+id/titleLayout"
+        android:id="@+id/allMusicTitleLayout"
         android:textColor="@color/white"
         android:textSize="@dimen/text_large"
         android:layout_below="@+id/textView4"
@@ -125,7 +125,7 @@
         android:textColor="@color/white"
         android:textSize="32sp"
         android:layout_below="@+id/progressBar2"
-        android:layout_toStartOf="@+id/artistLayout" />
+        android:layout_toStartOf="@+id/allMusicArtistLayout" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -159,7 +159,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/artist"
-        android:id="@+id/artistLayout"
+        android:id="@+id/allMusicArtistLayout"
         android:textSize="48sp"
         android:textColor="@color/white"
         android:layout_alignTop="@+id/imageButton2"

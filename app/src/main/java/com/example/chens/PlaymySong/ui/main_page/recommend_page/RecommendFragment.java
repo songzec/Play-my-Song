@@ -1,16 +1,24 @@
 package com.example.chens.PlaymySong.ui.main_page.recommend_page;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.example.chens.PlaymySong.R;
+import com.example.chens.PlaymySong.entities.Song;
+
 import com.example.chens.PlaymySong.ui.settings.SettingActivity;
+
+import java.util.ArrayList;
 /**
  * Created by Songze Chen on 2016/4/3.
  */
@@ -28,8 +36,14 @@ public class RecommendFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private RecommendTitleFragment recommendTitleFragment = new RecommendTitleFragment();
+    private RecommendArtistFragment recommendArtistFragment = new RecommendArtistFragment();
+    private RecommendAlbumFragment recommendAlbumFragment = new RecommendAlbumFragment();
+    private ArrayList<Song> songs = new ArrayList<Song>();
+    private FrameLayout recommendTitleLayout, recommendArtistLayout, recommendAlbumLayout;
     private ImageView settings;
     private View view;
+    private ListView listview;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -72,6 +86,12 @@ public class RecommendFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.recommend_page_recommendfragment, container, false);
+        recommendTitleLayout = (FrameLayout) view.findViewById(R.id.recommendTitleLayout);
+        recommendArtistLayout = (FrameLayout) view.findViewById(R.id.recommendArtistLayout);
+        recommendAlbumLayout = (FrameLayout) view.findViewById(R.id.recommendAlbumLayout);
+
+
+        initFragment();
         settings = (ImageView) view.findViewById(R.id.settingsView);
         settings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -81,6 +101,34 @@ public class RecommendFragment extends Fragment {
             }
         });
         return view;
+    }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        FrameLayout title = (FrameLayout) getActivity().findViewById(R.id.recommendTitleLayout);
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                showThisFragment(recommendTitleFragment);
+            }
+        });
+
+        FrameLayout artist = (FrameLayout) getActivity().findViewById(R.id.recommendArtistLayout);
+        artist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showThisFragment(recommendArtistFragment);
+            }
+        });
+
+        FrameLayout album = (FrameLayout) getActivity().findViewById(R.id.recommendAlbumLayout);
+        album.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showThisFragment(recommendAlbumFragment);
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -109,5 +157,58 @@ public class RecommendFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void initFragment() {
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        if (!recommendTitleFragment.isAdded()) {
+
+            fragmentTransaction.add(R.id.recommendSubContent, recommendTitleFragment);
+        }
+        if (!recommendArtistFragment.isAdded()) {
+            fragmentTransaction.add(R.id.recommendSubContent, recommendArtistFragment);
+        }
+        if (!recommendAlbumFragment.isAdded()) {
+            fragmentTransaction.add(R.id.recommendSubContent, recommendAlbumFragment);
+        }
+        showThisFragment(recommendTitleFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void showThisFragment(Fragment thisFragment) {
+        clearSelected();
+        changeTabStyle(thisFragment);
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.hide(recommendTitleFragment);
+        fragmentTransaction.hide(recommendArtistFragment);
+        fragmentTransaction.hide(recommendAlbumFragment);
+        fragmentTransaction.show(thisFragment);
+        fragmentTransaction.commit();
+    }
+
+    private void clearSelected() {
+        if (recommendTitleFragment.isVisible()) {
+            recommendTitleLayout.setBackgroundColor(Color.parseColor("#535353"));
+        }
+
+        if (recommendArtistFragment.isVisible()) {
+            recommendArtistLayout.setBackgroundColor(Color.parseColor("#535353"));
+        }
+
+        if (recommendAlbumFragment.isVisible()) {
+            recommendAlbumLayout.setBackgroundColor(Color.parseColor("#535353"));
+        }
+
+    }
+
+    private void changeTabStyle(Fragment tabFragment) {
+        if (tabFragment instanceof RecommendTitleFragment) {
+            recommendTitleLayout.setBackgroundColor(Color.parseColor("#34819D"));
+        } else if (tabFragment instanceof RecommendArtistFragment) {
+            recommendArtistLayout.setBackgroundColor(Color.parseColor("#34819D"));
+        } else if (tabFragment instanceof RecommendAlbumFragment) {
+            recommendAlbumLayout.setBackgroundColor(Color.parseColor("#34819D"));
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.example.chens.PlaymySong.ui.main_page.all_music_page;
+package com.example.chens.PlaymySong.ui.main_page;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.chens.PlaymySong.entities.Song;
-import com.example.chens.PlaymySong.ui.main_page.CustomNames;
 import com.example.chens.PlaymySong.ui.main_page.playing_page.PlayingActivity;
 import com.example.chens.PlaymySong.R;
 
@@ -35,7 +34,7 @@ import java.util.Comparator;
  * Created by Songze Chen on 2016/4/3.
  */
 
-public class AllMusicSubFragment extends Fragment {
+public class SortedFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -51,7 +50,7 @@ public class AllMusicSubFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public AllMusicSubFragment() {
+    public SortedFragment() {
         // Required empty public constructor
     }
 
@@ -61,11 +60,11 @@ public class AllMusicSubFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment AllMusicSubFragment.
+     * @return A new instance of fragment SortedFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static AllMusicSubFragment newInstance(String param1, String param2) {
-        AllMusicSubFragment fragment = new AllMusicSubFragment();
+    public static SortedFragment newInstance(String param1, String param2) {
+        SortedFragment fragment = new SortedFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

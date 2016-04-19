@@ -24,7 +24,7 @@
             android:layout_alignParentEnd="true" >
 
             <FrameLayout
-                android:id="@+id/frameLayout4"
+                android:id="@+id/recommendTitleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -42,7 +42,7 @@
             </FrameLayout>
 
             <FrameLayout
-                android:id="@+id/frameLayout5"
+                android:id="@+id/recommendArtistLayout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -60,7 +60,7 @@
             </FrameLayout>
 
             <FrameLayout
-                android:id="@+id/frameLayout6"
+                android:id="@+id/recommendAlbumLayout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -83,6 +83,14 @@
                 android:id="@+id/settingsView"
                 android:src="@drawable/setting_icon" />
         </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout2"
+            android:id="@+id/recommendSubContent"></FrameLayout>
 
     </RelativeLayout>
 </FrameLayout>

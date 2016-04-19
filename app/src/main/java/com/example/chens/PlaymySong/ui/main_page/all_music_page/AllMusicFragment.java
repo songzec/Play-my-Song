@@ -40,15 +40,15 @@ public class AllMusicFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private TitleFragment titleFragment = new TitleFragment();
-    private ArtistFragment artistFragment = new ArtistFragment();
-    private AlbumFragment albumFragment = new AlbumFragment();
+    private AllMusicTitleFragment allMusicTitleFragment = new AllMusicTitleFragment();
+    private AllMusicArtistFragment allMusicArtistFragment = new AllMusicArtistFragment();
+    private AllMusicAlbumFragment allMusicAlbumFragment = new AllMusicAlbumFragment();
     private ImageView settings;
     private TextView importMySongs;
     private MediaMetadataRetriever mmr;
     private ArrayList<Song> songs = new ArrayList<Song>();
     private View view;
-    private FrameLayout titleLayout, artistLayout, albumLayout;
+    private FrameLayout allMusicTitleLayout, allMusicArtistLayout, allMusicAlbumLayout;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -92,9 +92,9 @@ public class AllMusicFragment extends Fragment {
                              final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.all_music_page_allmusicfragment, container, false);
-        titleLayout = (FrameLayout) view.findViewById(R.id.titleLayout);
-        artistLayout = (FrameLayout) view.findViewById(R.id.artistLayout);
-        albumLayout = (FrameLayout) view.findViewById(R.id.albumLayout);
+        allMusicTitleLayout = (FrameLayout) view.findViewById(R.id.allMusicTitleLayout);
+        allMusicArtistLayout = (FrameLayout) view.findViewById(R.id.allMusicArtistLayout);
+        allMusicAlbumLayout = (FrameLayout) view.findViewById(R.id.allMusicAlbumLayout);
         initFragment();
 
 
@@ -119,9 +119,9 @@ public class AllMusicFragment extends Fragment {
                         songs.add(song);
                         db.addToPlayList(song);
                     }
-                    titleFragment.updateSongs(songs);
-                    artistFragment.updateSongs(songs);
-                    albumFragment.updateSongs(songs);
+                    allMusicTitleFragment.updateSongs(songs);
+                    allMusicArtistFragment.updateSongs(songs);
+                    allMusicAlbumFragment.updateSongs(songs);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -142,17 +142,17 @@ public class AllMusicFragment extends Fragment {
     private void initFragment() {
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        if (!titleFragment.isAdded()) {
+        if (!allMusicTitleFragment.isAdded()) {
 
-            fragmentTransaction.add(R.id.subContent, titleFragment);
+            fragmentTransaction.add(R.id.allMusicSubContent, allMusicTitleFragment);
         }
-        if (!artistFragment.isAdded()) {
-            fragmentTransaction.add(R.id.subContent, artistFragment);
+        if (!allMusicArtistFragment.isAdded()) {
+            fragmentTransaction.add(R.id.allMusicSubContent, allMusicArtistFragment);
         }
-        if (!albumFragment.isAdded()) {
-            fragmentTransaction.add(R.id.subContent, albumFragment);
+        if (!allMusicAlbumFragment.isAdded()) {
+            fragmentTransaction.add(R.id.allMusicSubContent, allMusicAlbumFragment);
         }
-        showThisFragment(titleFragment);
+        showThisFragment(allMusicTitleFragment);
         fragmentTransaction.commit();
     }
 
@@ -188,28 +188,28 @@ public class AllMusicFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FrameLayout title = (FrameLayout) getActivity().findViewById(R.id.titleLayout);
+        System.out.println("****");
+        FrameLayout title = (FrameLayout) getActivity().findViewById(R.id.allMusicTitleLayout);
         title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                showThisFragment(titleFragment);
+                showThisFragment(allMusicTitleFragment);
             }
         });
 
-        FrameLayout singer = (FrameLayout) getActivity().findViewById(R.id.artistLayout);
+        FrameLayout singer = (FrameLayout) getActivity().findViewById(R.id.allMusicArtistLayout);
         singer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showThisFragment(artistFragment);
+                showThisFragment(allMusicArtistFragment);
             }
         });
 
-        FrameLayout album = (FrameLayout) getActivity().findViewById(R.id.albumLayout);
+        FrameLayout album = (FrameLayout) getActivity().findViewById(R.id.allMusicAlbumLayout);
         album.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showThisFragment(albumFragment);
+                showThisFragment(allMusicAlbumFragment);
             }
         });
     }
@@ -218,38 +218,36 @@ public class AllMusicFragment extends Fragment {
         clearSelected();
         changeTabStyle(thisFragment);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.hide(titleFragment);
-        fragmentTransaction.hide(artistFragment);
-        fragmentTransaction.hide(albumFragment);
+        fragmentTransaction.hide(allMusicTitleFragment);
+        fragmentTransaction.hide(allMusicArtistFragment);
+        fragmentTransaction.hide(allMusicAlbumFragment);
         fragmentTransaction.show(thisFragment);
         fragmentTransaction.commit();
     }
 
     private void clearSelected() {
-        if (titleFragment.isVisible()) {
-            titleLayout.setBackgroundColor(Color.parseColor("#535353"));
+        if (allMusicTitleFragment.isVisible()) {
+            allMusicTitleLayout.setBackgroundColor(Color.parseColor("#535353"));
         }
 
-        if (artistFragment.isVisible()) {
-            artistLayout.setBackgroundColor(Color.parseColor("#535353"));
+        if (allMusicArtistFragment.isVisible()) {
+            allMusicArtistLayout.setBackgroundColor(Color.parseColor("#535353"));
         }
 
-        if (albumFragment.isVisible()) {
-            albumLayout.setBackgroundColor(Color.parseColor("#535353"));
+        if (allMusicAlbumFragment.isVisible()) {
+            allMusicAlbumLayout.setBackgroundColor(Color.parseColor("#535353"));
         }
 
     }
 
 
     private void changeTabStyle(Fragment tabFragment) {
-        if (tabFragment instanceof TitleFragment) {
-            titleLayout.setBackgroundColor(Color.parseColor("#34819D"));
-        } else if (tabFragment instanceof ArtistFragment) {
-            artistLayout.setBackgroundColor(Color.parseColor("#34819D"));
-        } else if (tabFragment instanceof AlbumFragment) {
-            albumLayout.setBackgroundColor(Color.parseColor("#34819D"));
+        if (tabFragment instanceof AllMusicTitleFragment) {
+            allMusicTitleLayout.setBackgroundColor(Color.parseColor("#34819D"));
+        } else if (tabFragment instanceof AllMusicArtistFragment) {
+            allMusicArtistLayout.setBackgroundColor(Color.parseColor("#34819D"));
+        } else if (tabFragment instanceof AllMusicAlbumFragment) {
+            allMusicAlbumLayout.setBackgroundColor(Color.parseColor("#34819D"));
         }
-
-
     }
 }

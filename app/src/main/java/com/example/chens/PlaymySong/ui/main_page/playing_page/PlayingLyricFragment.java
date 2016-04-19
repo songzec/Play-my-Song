@@ -96,8 +96,8 @@ public class PlayingLyricFragment extends Fragment {
         // initialize text views
         timePlayed = (TextView)view.findViewById(R.id.timePlayed);
         songLength = (TextView)view.findViewById(R.id.songLength);
-        title = (TextView)view.findViewById(R.id.titleLayout);
-        singer = (TextView)view.findViewById(R.id.titleLayout);
+        title = (TextView)view.findViewById(R.id.allMusicTitleLayout);
+        singer = (TextView)view.findViewById(R.id.allMusicTitleLayout);
         lyricTextView = (TextView)view.findViewById(R.id.lyricTextView);
 
         // set buttons' listeners

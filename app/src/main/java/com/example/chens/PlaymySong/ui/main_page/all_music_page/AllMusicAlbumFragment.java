@@ -1,16 +1,9 @@
 package com.example.chens.PlaymySong.ui.main_page.all_music_page;
 
-import android.net.Uri;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.example.chens.PlaymySong.R;
-import com.example.chens.PlaymySong.entities.Song;
+import com.example.chens.PlaymySong.ui.main_page.SortedFragment;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 /**
@@ -20,13 +13,13 @@ import java.util.Comparator;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link AlbumFragment.OnFragmentInteractionListener} interface
+ * {@link SortedFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link AlbumFragment#newInstance} factory method to
+ * Use the {@link AllMusicAlbumFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 
-public class AlbumFragment extends AllMusicSubFragment {
+public class AllMusicAlbumFragment extends SortedFragment {
     @Override
     public void sortList() {
         Collections.sort(allSongsName, new Comparator<String>() {

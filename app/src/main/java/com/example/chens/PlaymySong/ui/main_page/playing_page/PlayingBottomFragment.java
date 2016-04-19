@@ -104,7 +104,7 @@ public class PlayingBottomFragment extends Fragment {
 
         // initialize buttons
         setting = (ImageButton)view.findViewById(R.id.setting);
-        album = (ImageButton)view.findViewById(R.id.albumLayout);
+        album = (ImageButton)view.findViewById(R.id.allMusicAlbumLayout);
         backward = (ImageButton)view.findViewById(R.id.backward);
         forward = (ImageButton)view.findViewById(R.id.forward);
         play = (ImageButton)view.findViewById(R.id.play);
