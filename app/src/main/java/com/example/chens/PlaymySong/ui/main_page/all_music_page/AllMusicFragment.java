@@ -3,6 +3,7 @@ package com.example.chens.PlaymySong.ui.main_page.all_music_page;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Color;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +18,6 @@ import android.widget.TextView;
 import com.example.chens.PlaymySong.DBLayout.MyLocalDB;
 import com.example.chens.PlaymySong.R;
 import com.example.chens.PlaymySong.entities.Song;
-import com.example.chens.PlaymySong.ui.main_page.CustomNames;
-import com.example.chens.PlaymySong.ui.main_page.playing_page.PlayingActivity;
 import com.example.chens.PlaymySong.ui.settings.SettingActivity;
 
 import java.lang.reflect.Field;
@@ -47,9 +46,9 @@ public class AllMusicFragment extends Fragment {
     private ImageView settings;
     private TextView importMySongs;
     private MediaMetadataRetriever mmr;
-    private ArrayList<Song> songs;
+    private ArrayList<Song> songs = new ArrayList<Song>();
     private View view;
-    private FrameLayout titleLayout, singerLayout, albumLayout;
+    private FrameLayout titleLayout, artistLayout, albumLayout;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -93,17 +92,20 @@ public class AllMusicFragment extends Fragment {
                              final Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.all_music_page_allmusicfragment, container, false);
-
+        titleLayout = (FrameLayout) view.findViewById(R.id.titleLayout);
+        artistLayout = (FrameLayout) view.findViewById(R.id.artistLayout);
+        albumLayout = (FrameLayout) view.findViewById(R.id.albumLayout);
         initFragment();
+
+
         importMySongs = (TextView) view.findViewById(R.id.import_my_songs);
         importMySongs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-
+                    songs.clear();
                     Field[] fields = R.raw.class.getFields();
                     MyLocalDB db = new MyLocalDB(getContext());
-                    ArrayList<String> songList = new ArrayList<String>();
                     for (Field field : fields) {
                         AssetFileDescriptor afd;
                         int rawSourceID = field.getInt(null);
@@ -114,20 +116,18 @@ public class AllMusicFragment extends Fragment {
                         String artist = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST);
                         String album = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM);
                         Song song = new Song(title, artist, album, rawSourceID);
-                        songList.add(title + " - " + artist);
+                        songs.add(song);
                         db.addToPlayList(song);
                     }
-                    Bundle myBundle = new Bundle();
-                    myBundle.putSerializable(CustomNames.SONG_LIST, songList);
-                    Intent intent = new Intent();
-                    intent.setClass(v.getContext(), PlayingActivity.class);
-                    intent.putExtras(myBundle);
-                    startActivity(intent);
+                    titleFragment.updateSongs(songs);
+                    artistFragment.updateSongs(songs);
+                    albumFragment.updateSongs(songs);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+
         settings = (ImageView) view.findViewById(R.id.settingsView);
         settings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -155,6 +155,7 @@ public class AllMusicFragment extends Fragment {
         showThisFragment(titleFragment);
         fragmentTransaction.commit();
     }
+
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -187,7 +188,7 @@ public class AllMusicFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        FrameLayout title = (FrameLayout) getActivity().findViewById(R.id.title);
+        FrameLayout title = (FrameLayout) getActivity().findViewById(R.id.titleLayout);
         title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -196,7 +197,7 @@ public class AllMusicFragment extends Fragment {
             }
         });
 
-        FrameLayout singer = (FrameLayout) getActivity().findViewById(R.id.artist);
+        FrameLayout singer = (FrameLayout) getActivity().findViewById(R.id.artistLayout);
         singer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -204,7 +205,7 @@ public class AllMusicFragment extends Fragment {
             }
         });
 
-        FrameLayout album = (FrameLayout) getActivity().findViewById(R.id.album);
+        FrameLayout album = (FrameLayout) getActivity().findViewById(R.id.albumLayout);
         album.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,11 +215,41 @@ public class AllMusicFragment extends Fragment {
     }
 
     private void showThisFragment(Fragment thisFragment) {
+        clearSelected();
+        changeTabStyle(thisFragment);
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.hide(titleFragment);
         fragmentTransaction.hide(artistFragment);
         fragmentTransaction.hide(albumFragment);
         fragmentTransaction.show(thisFragment);
         fragmentTransaction.commit();
+    }
+
+    private void clearSelected() {
+        if (titleFragment.isVisible()) {
+            titleLayout.setBackgroundColor(Color.parseColor("#535353"));
+        }
+
+        if (artistFragment.isVisible()) {
+            artistLayout.setBackgroundColor(Color.parseColor("#535353"));
+        }
+
+        if (albumFragment.isVisible()) {
+            albumLayout.setBackgroundColor(Color.parseColor("#535353"));
+        }
+
+    }
+
+
+    private void changeTabStyle(Fragment tabFragment) {
+        if (tabFragment instanceof TitleFragment) {
+            titleLayout.setBackgroundColor(Color.parseColor("#34819D"));
+        } else if (tabFragment instanceof ArtistFragment) {
+            artistLayout.setBackgroundColor(Color.parseColor("#34819D"));
+        } else if (tabFragment instanceof AlbumFragment) {
+            albumLayout.setBackgroundColor(Color.parseColor("#34819D"));
+        }
+
+
     }
 }

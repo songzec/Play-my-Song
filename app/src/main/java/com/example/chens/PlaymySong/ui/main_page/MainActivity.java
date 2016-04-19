@@ -24,8 +24,10 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ListFragment listFragment = new ListFragment();
     private Top20Fragment top20Fragment = new Top20Fragment();
 
-    private FrameLayout allMusicLayout, recommendLayout, listLayout,
-            top20Layout;
+    private FrameLayout allMusicLayout;
+    private FrameLayout recommendLayout;
+    private FrameLayout listLayout;
+    private FrameLayout top20Layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

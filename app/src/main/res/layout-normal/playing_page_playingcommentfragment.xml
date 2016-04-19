@@ -12,7 +12,7 @@
         android:layout_height="70dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/song_name"
-        android:id="@+id/title"
+        android:id="@+id/titleLayout"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:background="@color/black"
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/artist"
-        android:id="@+id/artist"
+        android:id="@+id/artistLayout"
         android:textSize="24sp"
         android:textColor="@color/white"
         android:layout_below="@+id/textView5"
@@ -69,8 +69,8 @@
         android:layout_height="360dp"
         android:id="@+id/scrollView2"
         android:fillViewport="false"
-        android:layout_below="@+id/title"
-        android:layout_toStartOf="@+id/title"
+        android:layout_below="@+id/titleLayout"
+        android:layout_toStartOf="@+id/titleLayout"
         android:layout_alignEnd="@+id/setting" >
 
         <RelativeLayout
@@ -150,7 +150,7 @@
         android:id="@+id/song1"
         android:background="@color/light_gray"
         android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/title"
+        android:layout_toStartOf="@+id/titleLayout"
         android:layout_alignEnd="@+id/setting" />
 
     <ProgressBar

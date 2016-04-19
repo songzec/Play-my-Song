@@ -10,6 +10,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.chens.PlaymySong.entities.Song;
 
+import java.util.ArrayList;
+
 /**
  * Created by Songze Chen on 2016/4/14.
  */
@@ -112,8 +114,21 @@ public class MyLocalDB {
         return database.query(favoriteListTableName, null, null, null, null, null, null);
     }
 
-    public Cursor getPlayListAll() {
-        return database.query(playListTableName, null, null, null, null, null, null);
+    public ArrayList<Song> getPlayListAll() {
+        open();
+        Cursor cursor =  database.query(playListTableName, null, null, null, null, null, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+        cursor.moveToNext();
+        while (!cursor.isAfterLast()) {
+            String title = cursor.getString(0).split(" - ")[0];
+            String artist = cursor.getString(0).split(" - ")[1];
+            int rawSourceID = Integer.parseInt(cursor.getString(1));
+            String album = cursor.getString(2);
+            songs.add(new Song(title, artist, album, rawSourceID));
+            cursor.moveToNext();
+        }
+        close();
+        return songs;
     }
 
     public Cursor getRecentPlayListAll() {

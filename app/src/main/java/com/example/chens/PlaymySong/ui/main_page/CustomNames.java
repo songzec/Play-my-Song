@@ -5,4 +5,5 @@ package com.example.chens.PlaymySong.ui.main_page;
  */
 public interface CustomNames {
     public final String SONG_LIST = "SONG_LIST";
+    public final String CURR_POSITION = "CURR_POSITION";
 }

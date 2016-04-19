@@ -25,7 +25,7 @@
             android:layout_alignParentEnd="true">
 
             <FrameLayout
-                android:id="@+id/title"
+                android:id="@+id/titleLayout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -43,7 +43,7 @@
             </FrameLayout>
 
             <FrameLayout
-                android:id="@+id/artist"
+                android:id="@+id/artistLayout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -61,7 +61,7 @@
             </FrameLayout>
 
             <FrameLayout
-                android:id="@+id/album"
+                android:id="@+id/albumLayout"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -102,7 +102,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="388dp"
+        android:layout_height="370dp"
         android:layout_gravity="center_horizontal|bottom"
-        android:id="@+id/subContent"/>
+        android:id="@+id/subContent">
+
+    </FrameLayout>
 </FrameLayout>

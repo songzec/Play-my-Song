@@ -34,7 +34,7 @@
         android:id="@+id/listView"
         android:layout_below="@+id/textView6"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/album" />
+        android:layout_above="@+id/albumLayout" />
 
     <TextView
         android:layout_width="@dimen/header_height"
@@ -48,7 +48,7 @@
     <ImageButton
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:id="@+id/album"
+        android:id="@+id/albumLayout"
         android:layout_alignBottom="@+id/textView2"
         android:layout_alignParentStart="true"
         android:background="@drawable/album"/>
@@ -58,7 +58,7 @@
         android:layout_height="45dp"
         android:id="@+id/backward"
         android:layout_alignBottom="@+id/textView2"
-        android:layout_toEndOf="@+id/album"
+        android:layout_toEndOf="@+id/albumLayout"
         android:background="@drawable/backward"/>
 
     <ImageButton
@@ -83,7 +83,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
         android:layout_above="@+id/backward"
-        android:layout_toEndOf="@+id/album"
+        android:layout_toEndOf="@+id/albumLayout"
         android:indeterminate="false" />
 
     <TextView

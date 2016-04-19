@@ -1,5 +1,6 @@
 package com.example.chens.PlaymySong.ui.main_page.playing_page;
 
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.chens.PlaymySong.DBLayout.MyLocalDB;
 import com.example.chens.PlaymySong.R;
+import com.example.chens.PlaymySong.entities.Song;
 import com.example.chens.PlaymySong.ui.main_page.CustomNames;
 
 import java.util.ArrayList;
@@ -27,9 +29,9 @@ public class PlayingActivity extends AppCompatActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-
+    private MyLocalDB db = new MyLocalDB(this);
     // used for test, all songs' names
-    private ArrayList<String> allSongs;
+    private ArrayList<Song> allSongs;
     // used for test, lyric
     private String lyric = "Hello, it's me\n" +
                     "I was wondering if after all these years you'd like to meet\n" +
@@ -48,7 +50,7 @@ public class PlayingActivity extends AppCompatActivity {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
+    private int currentSongPos = -1;
     // all fragments
     private ArrayList<Fragment> fragments;
 
@@ -79,11 +81,13 @@ public class PlayingActivity extends AppCompatActivity {
 //        allSongs.add("Stay With Me");
 //        allSongs.add("Stronger");
 //        allSongs.add("Until You");
+
+        allSongs = db.getPlayListAll();
         Bundle bundle= getIntent().getExtras();
-        allSongs = (ArrayList)bundle.getSerializable(CustomNames.SONG_LIST);
+        currentSongPos = (int)bundle.getSerializable(CustomNames.CURR_POSITION);
         // put all fragments in the list
         fragments = new ArrayList<Fragment>();
-        fragments.add(PlayingBottomFragment.newInstance(allSongs));
+        fragments.add(PlayingBottomFragment.newInstance(allSongs, currentSongPos));
         fragments.add(PlayingLyricFragment.newInstance(lyric));
         fragments.add(PlayingCommentFragment.newInstance());
 

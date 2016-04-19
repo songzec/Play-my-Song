@@ -2,16 +2,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main_page.all_music_page.TitleFragment">
+    tools:context=".ui.main_page.all_music_page.AllMusicSubFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/tip"
-        android:id="@+id/song1"
-        android:layout_gravity="center"
-        android:textColor="@color/white" />
+        android:id="@+id/titleListView"
+        android:layout_gravity="left|top" />
+
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+        <!--android:text="@string/tip"-->
+        <!--android:id="@+id/song1"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:textColor="@color/white" />-->
+
 </FrameLayout>

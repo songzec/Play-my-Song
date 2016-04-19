@@ -85,8 +85,8 @@ public class PlayingCommentFragment extends Fragment {
         // initialize text views
         timePlayed = (TextView)view.findViewById(R.id.timePlayed);
         songLength = (TextView)view.findViewById(R.id.songLength);
-        title = (TextView)view.findViewById(R.id.title);
-        singer = (TextView)view.findViewById(R.id.title);
+        title = (TextView)view.findViewById(R.id.titleLayout);
+        singer = (TextView)view.findViewById(R.id.titleLayout);
 
         // set buttons' listeners
         setting.setOnClickListener(settingClick);

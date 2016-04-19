@@ -2,7 +2,6 @@ package com.example.chens.PlaymySong.ui.main_page.playing_page;
 
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -18,8 +17,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.chens.PlaymySong.DBLayout.MyLocalDB;
 import com.example.chens.PlaymySong.R;
+import com.example.chens.PlaymySong.entities.Song;
+import com.example.chens.PlaymySong.ui.main_page.CustomNames;
 import com.example.chens.PlaymySong.ui.settings.SettingActivity;
 
 import java.io.IOException;
@@ -35,13 +35,12 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class PlayingBottomFragment extends Fragment {
-    // static symbol
-    private static final String ALL_SONGS = "allSongs";
 
     private View view;
     private Toast toast;
     // save all songs name
-    private ArrayList<String> allSongs;
+    private ArrayList<String> allSongsName;
+    private ArrayList<Song> allSongs;
     MediaPlayer mediaPlayer = null;
     // all buttons
     private ImageButton setting;
@@ -59,7 +58,7 @@ public class PlayingBottomFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private Cursor cursor;
+    private int currentSongPos = -1;
     public PlayingBottomFragment() {
         // Required empty public constructor
     }
@@ -68,13 +67,13 @@ public class PlayingBottomFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param allSongs all songs in the playing list
      * @return A new instance of fragment PlayingBottomFragment.
      */
-    public static PlayingBottomFragment newInstance(ArrayList<String> allSongs) {
+    public static PlayingBottomFragment newInstance(ArrayList<Song> songs, int currentSongPos) {
         PlayingBottomFragment fragment = new PlayingBottomFragment();
         Bundle args = new Bundle();
-        args.putSerializable(ALL_SONGS, allSongs);
+        args.putSerializable(CustomNames.SONG_LIST, songs);
+        args.putSerializable(CustomNames.CURR_POSITION, currentSongPos);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,9 +82,17 @@ public class PlayingBottomFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            allSongs = (ArrayList<String>)getArguments().getSerializable(ALL_SONGS);
-            System.out.println(allSongs);
-            System.out.println(allSongs.get(0));
+            allSongs = (ArrayList<Song>)getArguments().getSerializable(CustomNames.SONG_LIST);
+            currentSongPos = (int)getArguments().getSerializable(CustomNames.CURR_POSITION);
+            generateSongName();
+
+        }
+    }
+
+    private void generateSongName() {
+        allSongsName = new ArrayList<>();
+        for (Song song : allSongs) {
+            allSongsName.add(song.getTitle() + " - " + song.getArtist());
         }
     }
 
@@ -97,7 +104,7 @@ public class PlayingBottomFragment extends Fragment {
 
         // initialize buttons
         setting = (ImageButton)view.findViewById(R.id.setting);
-        album = (ImageButton)view.findViewById(R.id.album);
+        album = (ImageButton)view.findViewById(R.id.albumLayout);
         backward = (ImageButton)view.findViewById(R.id.backward);
         forward = (ImageButton)view.findViewById(R.id.forward);
         play = (ImageButton)view.findViewById(R.id.play);
@@ -120,8 +127,8 @@ public class PlayingBottomFragment extends Fragment {
 
         // set list view adapter
         listView.setAdapter(new ArrayAdapter<String>(view.getContext(),
-                             android.R.layout.simple_list_item_1,
-                             (String[])allSongs.toArray(new String[allSongs.size()])) {
+                android.R.layout.simple_list_item_1,
+                (String[]) allSongsName.toArray(new String[allSongsName.size()])) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView textView = (TextView) super.getView(position, convertView, parent);
@@ -135,26 +142,14 @@ public class PlayingBottomFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView v = (TextView) view;
-                String titleAndArtist = v.getText().toString();
-                String title = titleAndArtist.split(" - ")[0];
-                String artist = titleAndArtist.split(" - ")[1];
-                MyLocalDB db = new MyLocalDB(getContext());
-
-                db.open();
-                cursor = db.getPlayListAll();
-                System.out.println(cursor.getCount());
-                cursor.moveToNext();
-                System.out.println(cursor.getCount());
-                while (!cursor.getString(0).equals(titleAndArtist)) {
-                    cursor.moveToNext();
-                }
-                System.out.println(cursor.getCount());
+                currentSongPos = position;
                 playMusic();
-
             }
         });
 
+        if (currentSongPos != -1) {
+            playMusic();
+        }
 
         return view;
     }
@@ -209,13 +204,26 @@ public class PlayingBottomFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            if (cursor != null) {
-                sendToast(String.valueOf(cursor.getCount()));
-                if (cursor.isFirst()) {
-                    cursor.moveToLast();
+            if (currentSongPos != -1) {
+                if (currentSongPos == 0) {
+                    currentSongPos = allSongs.size() - 1;
                 } else {
-                    cursor.moveToPrevious();
+                    currentSongPos--;
+                }
+                playMusic();
+            }
+        }
+    };
 
+    private View.OnClickListener forwardClick = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            if (currentSongPos != -1) {
+                if (currentSongPos == allSongs.size() - 1) {
+                    currentSongPos = 0;
+                } else {
+                    currentSongPos++;
                 }
                 playMusic();
             }
@@ -236,42 +244,24 @@ public class PlayingBottomFragment extends Fragment {
         }
     };
 
-    private View.OnClickListener forwardClick = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            if (cursor != null) {
-                sendToast(String.valueOf(cursor.getCount()));
-                if (cursor.isLast()) {
-                    cursor.moveToFirst();
-                } else {
-                    cursor.moveToNext();
-                }
-                playMusic();
-            }
-        }
-    };
-
     private void sendToast(String s) {
-
         if (toast == null){
             toast = Toast.makeText(getContext(), s, Toast.LENGTH_SHORT);
         }
-
         toast.setText(s);
         toast.setDuration(Toast.LENGTH_SHORT);
         toast.show();
     }
+
     private void playMusic() {
-        String titleAndArtist = cursor.getString(0);
-        System.out.println(titleAndArtist);
-        String title = titleAndArtist.split(" - ")[0];
-        String artist = titleAndArtist.split(" - ")[1];
-        sendToast("playing " + titleAndArtist);
+        Song currSong = allSongs.get(currentSongPos);
+        String title = currSong.getTitle();
+        String artist = currSong.getArtist();
+        sendToast("playing " + allSongsName.get(currentSongPos));
         titleBot.setText(title);
         artistBot.setText(artist);
 
-        int rawSourceID = Integer.parseInt(cursor.getString(1));
+        int rawSourceID = allSongs.get(currentSongPos).getRawSourceID();
         AssetFileDescriptor afd;
         afd = getResources().openRawResourceFd(rawSourceID);
 
