@@ -35,10 +35,6 @@ import java.util.ArrayList;
  * create an instance of this fragment.
  */
 public class AllMusicFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     private AllMusicTitleFragment allMusicTitleFragment = new AllMusicTitleFragment();
     private AllMusicArtistFragment allMusicArtistFragment = new AllMusicArtistFragment();
@@ -50,11 +46,6 @@ public class AllMusicFragment extends Fragment {
     private View view;
     private FrameLayout allMusicTitleLayout, allMusicArtistLayout, allMusicAlbumLayout;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
 
     public AllMusicFragment() {
         // Required empty public constructor
@@ -64,16 +55,12 @@ public class AllMusicFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AllMusicFragment.
      */
     // TODO: Rename and change types and number of parameters
     public static AllMusicFragment newInstance(String param1, String param2) {
         AllMusicFragment fragment = new AllMusicFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,10 +68,6 @@ public class AllMusicFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -139,6 +122,9 @@ public class AllMusicFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Link fragments to sub-content.
+     */
     private void initFragment() {
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
@@ -154,20 +140,6 @@ public class AllMusicFragment extends Fragment {
         }
         showThisFragment(allMusicTitleFragment);
         fragmentTransaction.commit();
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
     }
 
     /**
@@ -188,7 +160,7 @@ public class AllMusicFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        System.out.println("****");
+
         FrameLayout title = (FrameLayout) getActivity().findViewById(R.id.allMusicTitleLayout);
         title.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,6 +186,10 @@ public class AllMusicFragment extends Fragment {
         });
     }
 
+    /**
+     * Show the specified fragment's content.
+     * @param thisFragment
+     */
     private void showThisFragment(Fragment thisFragment) {
         clearSelected();
         changeTabStyle(thisFragment);
@@ -225,6 +201,9 @@ public class AllMusicFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Set all tab's color to default.
+     */
     private void clearSelected() {
         if (allMusicTitleFragment.isVisible()) {
             allMusicTitleLayout.setBackgroundColor(Color.parseColor("#535353"));
@@ -240,7 +219,10 @@ public class AllMusicFragment extends Fragment {
 
     }
 
-
+    /**
+     * Change the chosen tab's background color.
+     * @param tabFragment
+     */
     private void changeTabStyle(Fragment tabFragment) {
         if (tabFragment instanceof AllMusicTitleFragment) {
             allMusicTitleLayout.setBackgroundColor(Color.parseColor("#34819D"));

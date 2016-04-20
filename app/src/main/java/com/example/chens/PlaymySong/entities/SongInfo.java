@@ -10,7 +10,7 @@ public abstract class SongInfo {
     private String lyric;
     private Comments comments;
     private int rawSourceID;
-
+    private String link;
 
 
     public String getTitle() {
@@ -59,5 +59,13 @@ public abstract class SongInfo {
 
     public void setRawSourceID(int rawSourceID) {
         this.rawSourceID = rawSourceID;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

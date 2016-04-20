@@ -72,18 +72,18 @@
         android:layout_height="@dimen/button_height_large"
         android:text="@string/cancel"
         android:id="@+id/cancelButton"
-        android:layout_alignTop="@+id/button2"
-        android:layout_alignEnd="@+id/passwordConfirmSignUp" />
+        android:layout_alignTop="@+id/signUpButton"
+        android:layout_toStartOf="@+id/passwordConfirmSignUp" />
 
     <Button
         android:textSize="@dimen/text_large"
         android:layout_width="@dimen/button_width_large"
         android:layout_height="@dimen/button_height_large"
         android:text="@string/signup"
-        android:id="@+id/button2"
+        android:id="@+id/signUpButton"
         android:layout_below="@+id/textView6"
-        android:layout_toStartOf="@+id/passwordConfirmSignUp"
-        android:layout_marginTop="155dp" />
+        android:layout_alignEnd="@+id/passwordConfirmSignUp"
+        android:layout_marginTop="206dp" />
 
 
 </RelativeLayout>

@@ -25,7 +25,9 @@ public class MyLocalDB {
     private final String album = "album";
     private final String rawSourceID = "rawSourceID";
     private SQLiteDatabase database;
-
+    private final String SINGLE_QUOTES = "single_quotes";
+    private final String DOUBLE_QUOTES = "double_quotes";
+    private final String SPACE = "space";
     public MyLocalDB(Context context) {
         String dbName = "myDatabase";
         databaseOpenHelper =
@@ -34,13 +36,15 @@ public class MyLocalDB {
 
     ///////////////////////// CRUD method begin /////////////////////////////
     public void addToFavoriteList(Song song) {
-        try {
-            deleteFromFavoriteList(song.getTitle(), song.getArtist());
-        } catch (SQLiteException e) {
-            // do nothing
+        String title = song.getTitle();
+        String artist = song.getArtist();
+        if (containsInFavoriteList(title, artist)) {
+            deleteFromFavoriteList(title, artist);
         }
+
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndArtist, song.getTitle() + " - " + song.getArtist());
+        String key = toQuotationFreeString(title + " - " + artist);
+        newRecords.put(titleAndArtist, key);
         newRecords.put(album, song.getAlbum());
         newRecords.put(rawSourceID, song.getRawSourceID());
         open();
@@ -49,14 +53,15 @@ public class MyLocalDB {
     }
 
     public void addToPlayList(Song song) {
-        try {
-            deleteFromPlayList(song.getTitle(), song.getArtist());
-        } catch (SQLiteException e) {
-            // do nothing
+        String title = song.getTitle();
+        String artist = song.getArtist();
+        if (containsInPlayList(title, artist)) {
+            deleteFromPlayList(title, artist);
         }
 
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndArtist, song.getTitle() + " - " + song.getArtist());
+        String key = toQuotationFreeString(title + " - " + artist);
+        newRecords.put(titleAndArtist, key);
         newRecords.put(album, song.getAlbum());
         newRecords.put(rawSourceID, song.getRawSourceID());
         open();
@@ -65,9 +70,15 @@ public class MyLocalDB {
     }
 
     public void addToRecentPlayList(Song song) {
-        deleteFromRecentPlayList(song.getTitle(), song.getArtist());
+        String title = song.getTitle();
+        String artist = song.getArtist();
+        if (containsInRecentPlayList(title, artist)) {
+            deleteFromRecentPlayList(title, artist);
+        }
+
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndArtist, song.getTitle() + " - " + song.getArtist());
+        String key = toQuotationFreeString(title + " - " + artist);
+        newRecords.put(titleAndArtist, key);
         newRecords.put(album, song.getAlbum());
         newRecords.put(rawSourceID, song.getRawSourceID());
         open();
@@ -78,9 +89,9 @@ public class MyLocalDB {
     public void addToWishList(Song song) {
         deleteFromWishList(song.getTitle(), song.getArtist());
         ContentValues newRecords = new ContentValues();
-        newRecords.put(titleAndArtist, song.getTitle() + " - " + song.getArtist());
+        String key = toQuotationFreeString(song.getTitle() + " - " + song.getArtist());
+        newRecords.put(titleAndArtist, key);
         newRecords.put(album, song.getAlbum());
-        newRecords.put(rawSourceID, song.getRawSourceID());
         open();
         database.insert(wishListTableName, null, newRecords);
         close();
@@ -88,40 +99,41 @@ public class MyLocalDB {
 
     public void deleteFromFavoriteList(String title, String artist) {
         open();
-        database.delete(favoriteListTableName, titleAndArtist + "=" + title + " - " + artist, null);
+        String key = toQuotationFreeString(title + " - " + artist);
+        database.delete(favoriteListTableName, titleAndArtist + "='" + key + "'", null);
         close();
     }
 
     public void deleteFromPlayList(String title, String artist) {
         open();
-        database.delete(playListTableName, titleAndArtist + "=" + title + " - " + artist, null);
+        String key = toQuotationFreeString(title + " - " + artist);
+        database.delete(playListTableName, titleAndArtist + "='" + key + "'", null);
         close();
     }
 
     public void deleteFromRecentPlayList(String title, String artist) {
         open();
-        database.delete(recentPlayListTableName, titleAndArtist + "=" + title + " - " + artist, null);
+        String key = toQuotationFreeString(title + " - " + artist);
+        database.delete(recentPlayListTableName, titleAndArtist + "='" + key + "'", null);
         close();
     }
 
     public void deleteFromWishList(String title, String artist) {
         open();
-        database.delete(wishListTableName, titleAndArtist + "=" + title + " - " + artist, null);
+        String key = toQuotationFreeString(title + " - " + artist);
+        database.delete(wishListTableName, titleAndArtist + "='" + key + "'", null);
         close();
     }
 
-    public Cursor getFavoriteListAll() {
-        return database.query(favoriteListTableName, null, null, null, null, null, null);
-    }
-
-    public ArrayList<Song> getPlayListAll() {
+    public ArrayList<Song> getFavoriteListAll() {
         open();
-        Cursor cursor =  database.query(playListTableName, null, null, null, null, null, null);
+        Cursor cursor =  database.query(favoriteListTableName, null, null, null, null, null, null);
         ArrayList<Song> songs = new ArrayList<Song>();
         cursor.moveToNext();
         while (!cursor.isAfterLast()) {
-            String title = cursor.getString(0).split(" - ")[0];
-            String artist = cursor.getString(0).split(" - ")[1];
+            String titleAndArtist = revertQuotationString(cursor.getString(0));
+            String title = titleAndArtist.split(" - ")[0];
+            String artist = titleAndArtist.split(" - ")[1];
             int rawSourceID = Integer.parseInt(cursor.getString(1));
             String album = cursor.getString(2);
             songs.add(new Song(title, artist, album, rawSourceID));
@@ -131,12 +143,58 @@ public class MyLocalDB {
         return songs;
     }
 
-    public Cursor getRecentPlayListAll() {
-        return database.query(recentPlayListTableName, null, null, null, null, null, null);
+    public ArrayList<Song> getPlayListAll() {
+        open();
+        Cursor cursor =  database.query(playListTableName, null, null, null, null, null, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+
+        cursor.moveToNext();
+        while (!cursor.isAfterLast()) {
+            String titleAndArtist = revertQuotationString(cursor.getString(0));
+            String title = titleAndArtist.split(" - ")[0];
+            String artist = titleAndArtist.split(" - ")[1];
+            int rawSourceID = Integer.parseInt(cursor.getString(1));
+            String album = cursor.getString(2);
+            songs.add(new Song(title, artist, album, rawSourceID));
+            cursor.moveToNext();
+        }
+        close();
+        return songs;
     }
 
-    public Cursor getWishListAll() {
-        return database.query(wishListTableName, null, null, null, null, null, null);
+    public ArrayList<Song> getRecentPlayListAll() {
+        open();
+        Cursor cursor =  database.query(recentPlayListTableName, null, null, null, null, null, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+        cursor.moveToNext();
+        while (!cursor.isAfterLast()) {
+            String titleAndArtist = revertQuotationString(cursor.getString(0));
+            String title = titleAndArtist.split(" - ")[0];
+            String artist = titleAndArtist.split(" - ")[1];
+            int rawSourceID = Integer.parseInt(cursor.getString(1));
+            String album = cursor.getString(2);
+            songs.add(new Song(title, artist, album, rawSourceID));
+            cursor.moveToNext();
+        }
+        close();
+        return songs;
+    }
+
+    public ArrayList<Song> getWishListAll() {
+        open();
+        Cursor cursor =  database.query(wishListTableName, null, null, null, null, null, null);
+        ArrayList<Song> songs = new ArrayList<Song>();
+        cursor.moveToNext();
+        while (!cursor.isAfterLast()) {
+            String titleAndArtist = revertQuotationString(cursor.getString(0));
+            String title = titleAndArtist.split(" - ")[0];
+            String artist = titleAndArtist.split(" - ")[1];
+
+            songs.add(new Song(title, artist));
+            cursor.moveToNext();
+        }
+        close();
+        return songs;
     }
 
     public Cursor getFavoriteListOne(String title, String artist) {
@@ -154,7 +212,69 @@ public class MyLocalDB {
     public Cursor getWishListOne(String title, String artist) {
         return database.query(wishListTableName, null, titleAndArtist + "='" + title + " - " + artist + "'", null, null, null, null);
     }
+
+    public boolean containsInFavoriteList(String title, String artist) {
+        boolean contain;
+        open();
+        String key = toQuotationFreeString(title + " - " + artist);
+        Cursor cursor =  database.query(favoriteListTableName, null, titleAndArtist + "='" + key + "'", null, null, null, null);
+        contain = (cursor.getCount() != 0);
+        close();
+
+        return contain;
+    }
+
+    public boolean containsInPlayList(String title, String artist) {
+        boolean contain;
+        open();
+        String key = toQuotationFreeString(title + " - " + artist);
+        Cursor cursor =  database.query(playListTableName, null, titleAndArtist + "='" + key + "'", null, null, null, null);
+        contain = (cursor.getCount() != 0);
+        close();
+
+        return contain;
+    }
+
+    public boolean containsInRecentPlayList(String title, String artist) {
+        boolean contain;
+        open();
+        String key = toQuotationFreeString(title + " - " + artist);
+        Cursor cursor =  database.query(recentPlayListTableName, null, titleAndArtist + "='" + key + "'", null, null, null, null);
+        contain = (cursor.getCount() != 0);
+        close();
+
+        return contain;
+    }
+
+    public boolean containsInWishList(String title, String artist) {
+        boolean contain;
+        open();
+        String key = toQuotationFreeString(title + " - " + artist);
+        Cursor cursor =  database.query(wishListTableName, null, titleAndArtist + "='" + key + "'", null, null, null, null);
+        contain = (cursor.getCount() != 0);
+        close();
+
+        return contain;
+    }
     ///////////////////////// CRUD method end /////////////////////////////
+
+    /**
+     * Help function for storing quotation mark containing String.
+     * @param raw
+     * @return the String stored in database. e.g. "PullinSINGLE_QUOTES Me In  - Wyclef Jean"
+     */
+    private String toQuotationFreeString(String raw) {
+        return raw.replace("'", SINGLE_QUOTES).replace("\"", DOUBLE_QUOTES).replace(" ", SPACE);
+    }
+
+    /**
+     * Help function for storing quotation mark containing String.
+     * @param quotationFree
+     * @return the raw String. e.g. "Pullin' Me In  - Wyclef Jean"
+     */
+    private String revertQuotationString(String quotationFree) {
+        return quotationFree.replace(SINGLE_QUOTES, "'").replace(DOUBLE_QUOTES, "\"").replace(SPACE, " ");
+    }
 
     public void open() throws SQLException {
         // create or open a database for reading/writing
@@ -166,6 +286,9 @@ public class MyLocalDB {
             database.close(); // close the database connection
         }
     }
+
+
+
     private class DatabaseOpenHelper extends SQLiteOpenHelper {
         public DatabaseOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
             super(context, name, factory, version);

@@ -16,8 +16,7 @@
         android:text="@string/user_id"
         android:id="@+id/textView4"
         android:layout_marginTop="86dp"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/cancelButton" />
+        android:layout_alignParentTop="true" />
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signup"
-        android:id="@+id/button2"
+        android:id="@+id/signUpButton"
         android:layout_alignTop="@+id/cancelButton"
         android:layout_alignEnd="@+id/passwordConfirmSignUp"
         android:layout_marginEnd="56dp" />

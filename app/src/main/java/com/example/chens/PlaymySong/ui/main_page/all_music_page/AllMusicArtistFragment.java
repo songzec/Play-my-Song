@@ -18,9 +18,9 @@ import java.util.Comparator;
  * Use the {@link AllMusicArtistFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AllMusicArtistFragment extends SortedFragment {
+public class AllMusicArtistFragment extends SortedAllMusicFragment {
     @Override
-    public void sortList() {
+    public void sortNameList() {
         Collections.sort(allSongsName, new Comparator<String>() {
             @Override
             public int compare(String song1, String song2) {

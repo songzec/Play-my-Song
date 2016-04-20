@@ -40,7 +40,7 @@ public class SortedFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private ListView listview;
+    protected ListView listview;
     private View view;
     protected ArrayList<String> allSongsName = new ArrayList<String>();
 
@@ -108,7 +108,7 @@ public class SortedFragment extends Fragment {
     /**
      * to be override, default by title.
      */
-    public void sortList() {
+    public void sortNameList() {
         Collections.sort(allSongsName, new Comparator<String>() {
             @Override
             public int compare(String song1, String song2) {
@@ -119,14 +119,21 @@ public class SortedFragment extends Fragment {
         });
     }
 
+    /**
+     * Update list view accoring to the ArrayList of songs.
+     * @param songs
+     */
     public void updateSongs(ArrayList<Song> songs) {
-        allSongsName = new ArrayList<>();
-        for (Song song : songs) {
-            allSongsName.add(song.getTitle() + " - " + song.getArtist() + " - " + song.getAlbum());
-        }
+        updateSongsName(songs);
+        sortNameList();
+        setListViewAdapter();
+        setListViewOnClickListener();
+    }
 
-        sortList();
-
+    /**
+     * Link ListView and ArrayList of song names.
+     */
+    private void setListViewAdapter() {
         listview.setAdapter(new ArrayAdapter<String>(view.getContext(),
                 android.R.layout.simple_list_item_1,
                 (String[]) allSongsName.toArray(new String[allSongsName.size()])) {
@@ -137,7 +144,12 @@ public class SortedFragment extends Fragment {
                 return textView;
             }
         });
+    }
 
+    /**
+     * By default will be derived to play page.
+     */
+    protected void setListViewOnClickListener() {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -147,6 +159,18 @@ public class SortedFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    /**
+     * Create a new song name list according to the ArrayList of songs.
+     * Could be override when album's information is lacked.
+     * @param songs
+     */
+    protected void updateSongsName(ArrayList<Song> songs) {
+        allSongsName = new ArrayList<>();
+        for (Song song : songs) {
+            allSongsName.add(song.getTitle() + " - " + song.getArtist() + " - " + song.getAlbum());
+        }
     }
 
     /**

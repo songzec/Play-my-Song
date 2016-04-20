@@ -12,7 +12,7 @@ import com.example.chens.PlaymySong.R;
  * Created by Songze Chen on 2016/4/3.
  */
 public class CoverActivity extends AppCompatActivity {
-    private Button loginButton, signUpButton, justPlayButton;
+    private Button loginButton, toSignUpActivityButton, justPlayButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +27,8 @@ public class CoverActivity extends AppCompatActivity {
             }
         });
 
-        signUpButton = (Button) findViewById(R.id.signUpButton);
-        signUpButton.setOnClickListener(new Button.OnClickListener() {
+        toSignUpActivityButton = (Button) findViewById(R.id.toSignUpActivityButton);
+        toSignUpActivityButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(v.getContext(), SignUpActivity.class);

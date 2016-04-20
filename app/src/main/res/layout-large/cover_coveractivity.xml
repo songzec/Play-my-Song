@@ -25,7 +25,7 @@
         android:layout_height="@dimen/button_height_large"
         android:textSize="@dimen/text_large"
         android:text="@string/signup"
-        android:id="@+id/signUpButton"
+        android:id="@+id/toSignUpActivityButton"
         android:layout_alignTop="@+id/loginButton"
         android:layout_toEndOf="@+id/justPlayButton" />
 
@@ -35,7 +35,7 @@
         android:textSize="@dimen/text_large"
         android:text="@string/just_play_it"
         android:id="@+id/justPlayButton"
-        android:layout_below="@+id/signUpButton"
+        android:layout_below="@+id/toSignUpActivityButton"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="36dp" />
 </RelativeLayout>

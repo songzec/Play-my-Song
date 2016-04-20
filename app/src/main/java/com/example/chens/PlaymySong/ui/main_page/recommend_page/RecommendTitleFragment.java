@@ -5,5 +5,5 @@ import com.example.chens.PlaymySong.ui.main_page.SortedFragment;
 /**
  * Created by Songze Chen on 2016/4/19.
  */
-public class RecommendTitleFragment extends SortedFragment {
+public class RecommendTitleFragment extends SortedRecommendFragment {
 }

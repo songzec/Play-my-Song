@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/signup"
-        android:id="@+id/signUpButton"
+        android:id="@+id/toSignUpActivityButton"
         android:layout_alignTop="@+id/loginButton"
         android:layout_toEndOf="@+id/justPlayButton" />
 
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="@string/just_play_it"
         android:id="@+id/justPlayButton"
-        android:layout_below="@+id/signUpButton"
+        android:layout_below="@+id/toSignUpActivityButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="36dp" />
+        android:layout_marginTop="23dp" />
 </RelativeLayout>

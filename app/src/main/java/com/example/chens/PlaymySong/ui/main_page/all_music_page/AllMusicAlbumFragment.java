@@ -19,9 +19,9 @@ import java.util.Comparator;
  * create an instance of this fragment.
  */
 
-public class AllMusicAlbumFragment extends SortedFragment {
+public class AllMusicAlbumFragment extends SortedAllMusicFragment {
     @Override
-    public void sortList() {
+    public void sortNameList() {
         Collections.sort(allSongsName, new Comparator<String>() {
             @Override
             public int compare(String song1, String song2) {
