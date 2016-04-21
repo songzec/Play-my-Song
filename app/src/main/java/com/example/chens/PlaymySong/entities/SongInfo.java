@@ -1,9 +1,12 @@
 package com.example.chens.PlaymySong.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by Songze Chen on 2016/4/14.
  */
-public abstract class SongInfo {
+public abstract class SongInfo implements Serializable {
+    public static final String LYRIC_NOT_AVAILABLE = "LYRIC_NOT_AVAILABLE";
     private String title;
     private String artist;
     private String album;

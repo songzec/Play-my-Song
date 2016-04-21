@@ -13,8 +13,17 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.chens.PlaymySong.DBLayout.MyLocalDB;
 import com.example.chens.PlaymySong.R;
+import com.example.chens.PlaymySong.entities.Song;
+import com.example.chens.PlaymySong.ui.main_page.CustomNames;
 import com.example.chens.PlaymySong.ui.settings.SettingActivity;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 
 /**
@@ -27,7 +36,7 @@ import com.example.chens.PlaymySong.ui.settings.SettingActivity;
  */
 public class PlayingLyricFragment extends Fragment {
     // static symbol
-    private static final String LYRIC = "lyric";
+
 
     private View view;
 
@@ -45,12 +54,10 @@ public class PlayingLyricFragment extends Fragment {
     // all text views
     private TextView timePlayed;
     private TextView songLength;
-    private TextView title;
-    private TextView singer;
+    private TextView titleTextView;
+    private TextView artistTextView;
     private TextView lyricTextView;
 
-
-    private OnFragmentInteractionListener mListener;
 
     public PlayingLyricFragment() {
         // Required empty public constructor
@@ -66,7 +73,7 @@ public class PlayingLyricFragment extends Fragment {
     public static PlayingLyricFragment newInstance(String lyric) {
         PlayingLyricFragment fragment = new PlayingLyricFragment();
         Bundle args = new Bundle();
-        args.putString(LYRIC, lyric);
+        args.putString(CustomNames.LYRIC, lyric);
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,8 +82,76 @@ public class PlayingLyricFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            lyric = getArguments().getString(LYRIC);
+            new Thread(changeLyric).start();
         }
+    }
+
+
+    public Runnable changeLyric = new Runnable() {
+        @Override
+        public void run() {
+            Song song = PlayingResource.allSongs.get(PlayingResource.currentSongPos);
+            lyric = song.getLyric();
+            final String title = song.getTitle();
+            final String artist = song.getArtist();
+            if (lyric == null) {
+
+                searchLyricOnline(title, artist);
+                // TODO: 2016/4/20 save to db
+                song.setLyric(lyric);
+                MyLocalDB db = new MyLocalDB(getContext());
+                db.addToPlayList(song);
+            }
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    lyricTextView.setText(lyric);
+                    titleTextView.setText(title);
+                    artistTextView.setText(artist);
+                }
+            });
+
+        }
+    };
+
+
+    private void searchLyricOnline(String title, String artist) {
+        lyric = Song.LYRIC_NOT_AVAILABLE;
+        String LYRICS__URL_SUFFIX =
+                title.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase()
+                        + "-lyrics-"
+                        + artist.replaceAll("[^a-zA-Z0-9]", "-").toLowerCase()
+                        + ".html";
+        String URL_ADDR = CustomNames.LYRICS_URL_PREFIX + LYRICS__URL_SUFFIX;
+        URL url = null;
+        try {
+            url = new URL(URL_ADDR);
+            InputStream is = url.openStream();
+            BufferedReader bis = new BufferedReader(new InputStreamReader(is)) ;
+            String line = null ;
+
+            while((line = bis.readLine()) != null){
+                if (line.contains("id=\"lyrics\"")) {
+
+                    int index = line.indexOf("<div id=\"lyrics\" class=\"SCREENONLY\" itemprop=\"description\">")
+                                            + "<div id=\"lyrics\" class=\"SCREENONLY\" itemprop=\"description\">".length();
+                    StringBuilder lyricBuilder = new StringBuilder();
+                    lyricBuilder.append(line.substring(index).replaceAll("<br />", "\n").replaceAll("\\&#8217;", "'"));
+                    while (!(line = bis.readLine()).contains("id=\"lyrics\"")) {
+                        lyricBuilder.append(line.replaceAll("<br />", "\n").replaceAll("\\&#8217;", "'"));
+                    }
+                    index = line.indexOf("<br />");
+                    lyricBuilder.append(line.substring(0, index));
+
+                    lyric = lyricBuilder.toString();
+                    break;
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -96,8 +171,8 @@ public class PlayingLyricFragment extends Fragment {
         // initialize text views
         timePlayed = (TextView)view.findViewById(R.id.timePlayed);
         songLength = (TextView)view.findViewById(R.id.songLength);
-        title = (TextView)view.findViewById(R.id.allMusicTitleLayout);
-        singer = (TextView)view.findViewById(R.id.allMusicTitleLayout);
+        titleTextView = (TextView)view.findViewById(R.id.allMusicTitleLayout);
+        artistTextView = (TextView)view.findViewById(R.id.allMusicArtistLayout);
         lyricTextView = (TextView)view.findViewById(R.id.lyricTextView);
 
         // set buttons' listeners
@@ -115,17 +190,12 @@ public class PlayingLyricFragment extends Fragment {
         return view;
     }
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this

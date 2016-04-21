@@ -24,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 /**
@@ -55,20 +54,12 @@ public class RecommendFragment extends Fragment {
     private Runnable doRecommendation = new Runnable() {
         @Override
         public void run() {
-            MyLocalDB db = new MyLocalDB(getContext());
+            MyLocalDB db = new MyLocalDB(getActivity().getApplicationContext());
             localSongs = db.getPlayListAll();
             recommendSongs.clear();
             for (Song localSong : localSongs) {
                 addRecommendSongs(localSong, 2);
             }
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    recommendTitleFragment.updateSongs(recommendSongs);
-                    recommendArtistFragment.updateSongs(recommendSongs);
-                }
-            });
-
         }
     };
 
@@ -78,8 +69,8 @@ public class RecommendFragment extends Fragment {
      * @param n recommend n songs per local song
      */
     private void addRecommendSongs(Song localSong, int n) {
-        String title = localSong.getTitle().replaceAll(" ", "").toLowerCase();
-        String URL_ADDR = CustomNames.RECOMMEMD_URL_ADDR + title;
+        String title = localSong.getTitle().replaceAll(" ", "%20").toLowerCase();
+        String URL_ADDR = CustomNames.RECOMMEMD_URL_PREFIX + title;
         URL url = null;
         try {
             url = new URL(URL_ADDR);
@@ -101,6 +92,15 @@ public class RecommendFragment extends Fragment {
                     recommendSong.setLink(recommendSongLink);
                     recommendSongs.add(recommendSong);
                     added++;
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            recommendTitleFragment.updateSongs(recommendSongs);
+                            recommendArtistFragment.updateSongs(recommendSongs);
+                        }
+                    });
+
                 }
             }
         } catch (IOException e) {

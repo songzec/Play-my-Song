@@ -27,7 +27,7 @@ public class SortedRecommendFragment extends SortedFragment {
 
 
     @Override
-    protected void setListViewOnClickListener() {
+    protected void setListViewOnClickListener(final ArrayList<Song> songs) {
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

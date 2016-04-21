@@ -82,13 +82,14 @@ public class AllMusicFragment extends Fragment {
 
 
         importMySongs = (TextView) view.findViewById(R.id.import_my_songs);
+        System.out.println(importMySongs);
         importMySongs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     songs.clear();
                     Field[] fields = R.raw.class.getFields();
-                    MyLocalDB db = new MyLocalDB(getContext());
+                    MyLocalDB db = new MyLocalDB(getActivity().getApplicationContext());
                     for (Field field : fields) {
                         AssetFileDescriptor afd;
                         int rawSourceID = field.getInt(null);

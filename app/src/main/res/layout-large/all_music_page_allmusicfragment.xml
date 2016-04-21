@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="127dp"
+        android:layout_height="265dp"
         android:layout_gravity="center_horizontal|top"
         android:background="@color/black">
 
@@ -87,16 +87,19 @@
 
         </LinearLayout>
 
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/import_my_songs"
-            android:id="@+id/textView"
-            android:layout_marginTop="34dp"
+            android:id="@+id/import_my_songs"
+            android:layout_marginTop="60dp"
             android:layout_below="@+id/linearLayout"
             android:layout_centerHorizontal="true"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:textSize="50sp"
+            android:textIsSelectable="false" />
 
     </RelativeLayout>
 

@@ -40,7 +40,7 @@ public class PlayingBottomFragment extends Fragment {
     private Toast toast;
     // save all songs name
     private ArrayList<String> allSongsName;
-    private ArrayList<Song> allSongs;
+
     MediaPlayer mediaPlayer = null;
     // all buttons
     private ImageButton setting;
@@ -55,10 +55,10 @@ public class PlayingBottomFragment extends Fragment {
     private TextView titleBot;
     private TextView artistBot;
     private ListView listView;
-
+    private PlayingLyricFragment lyricFragment;
     private OnFragmentInteractionListener mListener;
 
-    private int currentSongPos = -1;
+
     public PlayingBottomFragment() {
         // Required empty public constructor
     }
@@ -69,11 +69,9 @@ public class PlayingBottomFragment extends Fragment {
      *
      * @return A new instance of fragment PlayingBottomFragment.
      */
-    public static PlayingBottomFragment newInstance(ArrayList<Song> songs, int currentSongPos) {
+    public static PlayingBottomFragment newInstance() {
         PlayingBottomFragment fragment = new PlayingBottomFragment();
         Bundle args = new Bundle();
-        args.putSerializable(CustomNames.SONG_LIST, songs);
-        args.putSerializable(CustomNames.CURR_POSITION, currentSongPos);
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,17 +79,13 @@ public class PlayingBottomFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            allSongs = (ArrayList<Song>)getArguments().getSerializable(CustomNames.SONG_LIST);
-            currentSongPos = (int)getArguments().getSerializable(CustomNames.CURR_POSITION);
-            generateSongName();
-
-        }
+        generateSongName();
+        lyricFragment = (PlayingLyricFragment)((PlayingActivity)getActivity()).fragments.get(1);
     }
 
     private void generateSongName() {
         allSongsName = new ArrayList<>();
-        for (Song song : allSongs) {
+        for (Song song : PlayingResource.allSongs) {
             allSongsName.add(song.getTitle() + " - " + song.getArtist());
         }
     }
@@ -142,12 +136,12 @@ public class PlayingBottomFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                currentSongPos = position;
+                PlayingResource.currentSongPos = position;
                 playMusic();
             }
         });
 
-        if (currentSongPos != -1) {
+        if (PlayingResource.currentSongPos != -1) {
             playMusic();
         }
 
@@ -204,11 +198,11 @@ public class PlayingBottomFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            if (currentSongPos != -1) {
-                if (currentSongPos == 0) {
-                    currentSongPos = allSongs.size() - 1;
+            if (PlayingResource.currentSongPos != -1) {
+                if (PlayingResource.currentSongPos == 0) {
+                    PlayingResource.currentSongPos = PlayingResource.allSongs.size() - 1;
                 } else {
-                    currentSongPos--;
+                    PlayingResource.currentSongPos--;
                 }
                 playMusic();
             }
@@ -219,11 +213,11 @@ public class PlayingBottomFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            if (currentSongPos != -1) {
-                if (currentSongPos == allSongs.size() - 1) {
-                    currentSongPos = 0;
+            if (PlayingResource.currentSongPos != -1) {
+                if (PlayingResource.currentSongPos == PlayingResource.allSongs.size() - 1) {
+                    PlayingResource.currentSongPos = 0;
                 } else {
-                    currentSongPos++;
+                    PlayingResource.currentSongPos++;
                 }
                 playMusic();
             }
@@ -254,14 +248,14 @@ public class PlayingBottomFragment extends Fragment {
     }
 
     private void playMusic() {
-        Song currSong = allSongs.get(currentSongPos);
+        Song currSong = PlayingResource.allSongs.get(PlayingResource.currentSongPos);
         String title = currSong.getTitle();
         String artist = currSong.getArtist();
-        sendToast("playing " + allSongsName.get(currentSongPos));
+        sendToast("playing " + allSongsName.get(PlayingResource.currentSongPos));
         titleBot.setText(title);
         artistBot.setText(artist);
 
-        int rawSourceID = allSongs.get(currentSongPos).getRawSourceID();
+        int rawSourceID = PlayingResource.allSongs.get(PlayingResource.currentSongPos).getRawSourceID();
         AssetFileDescriptor afd;
         afd = getResources().openRawResourceFd(rawSourceID);
 
@@ -274,6 +268,8 @@ public class PlayingBottomFragment extends Fragment {
             afd.close();
             mediaPlayer.prepare();
             mediaPlayer.start();
+            new Thread(lyricFragment.changeLyric).start();
+
         } catch (IOException e) {
             e.printStackTrace();
         }

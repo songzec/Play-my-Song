@@ -2,8 +2,10 @@ package com.example.chens.PlaymySong.ui.main_page.all_music_page;
 
 import android.app.Fragment;
 
+import com.example.chens.PlaymySong.entities.Song;
 import com.example.chens.PlaymySong.ui.main_page.SortedFragment;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 /**
@@ -21,13 +23,11 @@ import java.util.Comparator;
 
 public class AllMusicAlbumFragment extends SortedAllMusicFragment {
     @Override
-    public void sortNameList() {
-        Collections.sort(allSongsName, new Comparator<String>() {
+    protected void sortSongs(ArrayList<Song> songs) {
+        Collections.sort(songs, new Comparator<Song>() {
             @Override
-            public int compare(String song1, String song2) {
-                String album1 = song1.split(" - ")[2];
-                String album2 = song2.split(" - ")[2];
-                return album1.compareToIgnoreCase(album2);
+            public int compare(Song song1, Song song2) {
+                return song1.getAlbum().compareToIgnoreCase(song2.getAlbum());
             }
         });
     }

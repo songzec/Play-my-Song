@@ -23,6 +23,7 @@ public class MyLocalDB {
     private final String wishListTableName = "WishListTable";
     private final String titleAndArtist = "title_artist";
     private final String album = "album";
+    private final String lyric = "lyric";
     private final String rawSourceID = "rawSourceID";
     private SQLiteDatabase database;
     private final String SINGLE_QUOTES = "single_quotes";
@@ -64,6 +65,9 @@ public class MyLocalDB {
         newRecords.put(titleAndArtist, key);
         newRecords.put(album, song.getAlbum());
         newRecords.put(rawSourceID, song.getRawSourceID());
+        if (song.getLyric() != null) {
+            newRecords.put(lyric, toQuotationFreeString(song.getLyric()));
+        }
         open();
         database.insert(playListTableName, null, newRecords);
         close();
@@ -154,8 +158,15 @@ public class MyLocalDB {
             String title = titleAndArtist.split(" - ")[0];
             String artist = titleAndArtist.split(" - ")[1];
             int rawSourceID = Integer.parseInt(cursor.getString(1));
-            String album = cursor.getString(2);
-            songs.add(new Song(title, artist, album, rawSourceID));
+
+            String album = cursor.getString(3);
+            Song song = new Song(title, artist, album, rawSourceID);
+            if (cursor.getString(2) != null) {
+                String lyric = revertQuotationString(cursor.getString(2));
+                song.setLyric(lyric);
+            }
+
+            songs.add(song);
             cursor.moveToNext();
         }
         close();
@@ -264,7 +275,7 @@ public class MyLocalDB {
      * @return the String stored in database. e.g. "PullinSINGLE_QUOTES Me In  - Wyclef Jean"
      */
     private String toQuotationFreeString(String raw) {
-        return raw.replace("'", SINGLE_QUOTES).replace("\"", DOUBLE_QUOTES).replace(" ", SPACE);
+        return raw.replace("'", SINGLE_QUOTES).replace("\"", DOUBLE_QUOTES);
     }
 
     /**
@@ -273,7 +284,7 @@ public class MyLocalDB {
      * @return the raw String. e.g. "Pullin' Me In  - Wyclef Jean"
      */
     private String revertQuotationString(String quotationFree) {
-        return quotationFree.replace(SINGLE_QUOTES, "'").replace(DOUBLE_QUOTES, "\"").replace(SPACE, " ");
+        return quotationFree.replace(SINGLE_QUOTES, "'").replace(DOUBLE_QUOTES, "\"");
     }
 
     public void open() throws SQLException {
@@ -307,6 +318,7 @@ public class MyLocalDB {
             createQuery = "CREATE TABLE " + playListTableName + " ("
                     + titleAndArtist + " TEXT PRIMARY KEY,"
                     + rawSourceID + " INTEGER,"
+                    + lyric + " TEXT,"
                     + album + " TEXT);";
             db.execSQL(createQuery);
 

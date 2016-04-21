@@ -31,7 +31,7 @@ public class PlayingActivity extends AppCompatActivity {
      */
     private MyLocalDB db = new MyLocalDB(this);
     // used for test, all songs' names
-    private ArrayList<Song> allSongs;
+
     // used for test, lyric
     private String lyric = "Hello, it's me\n" +
                     "I was wondering if after all these years you'd like to meet\n" +
@@ -50,9 +50,9 @@ public class PlayingActivity extends AppCompatActivity {
 
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private int currentSongPos = -1;
+
     // all fragments
-    private ArrayList<Fragment> fragments;
+    public ArrayList<Fragment> fragments;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -64,30 +64,13 @@ public class PlayingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playingpage_playingactivity);
 
-        // used for test, add all songs' names
-//        allSongs = new ArrayList<String>();
-//        allSongs.add("Hello");
-//        allSongs.add("Billy Brown");
-//        allSongs.add("Born This Way");
-//        allSongs.add("Count On Me");
-//        allSongs.add("Grenade");
-//        allSongs.add("Happy Ending");
-//        allSongs.add("Heartbreak Hotel");
-//        allSongs.add("I Knew You Were Trouble");
-//        allSongs.add("Lemon Tree");
-//        allSongs.add("No Matter");
-//        allSongs.add("Runaway Baby");
-//        allSongs.add("Sorry");
-//        allSongs.add("Stay With Me");
-//        allSongs.add("Stronger");
-//        allSongs.add("Until You");
-
-        allSongs = db.getPlayListAll();
         Bundle bundle= getIntent().getExtras();
-        currentSongPos = (int)bundle.getSerializable(CustomNames.CURR_POSITION);
+        PlayingResource.allSongs = (ArrayList<Song>) bundle.getSerializable(CustomNames.SONG_LIST);
+        PlayingResource.currentSongPos = (int)bundle.getSerializable(CustomNames.CURR_POSITION);
+        System.out.println(PlayingResource.currentSongPos);
         // put all fragments in the list
         fragments = new ArrayList<Fragment>();
-        fragments.add(PlayingBottomFragment.newInstance(allSongs, currentSongPos));
+        fragments.add(PlayingBottomFragment.newInstance());
         fragments.add(PlayingLyricFragment.newInstance(lyric));
         fragments.add(PlayingCommentFragment.newInstance());
 

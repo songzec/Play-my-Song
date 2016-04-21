@@ -1,7 +1,9 @@
 package com.example.chens.PlaymySong.ui.main_page.recommend_page;
 
+import com.example.chens.PlaymySong.entities.Song;
 import com.example.chens.PlaymySong.ui.main_page.SortedFragment;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -10,13 +12,11 @@ import java.util.Comparator;
  */
 public class RecommendArtistFragment extends SortedRecommendFragment {
     @Override
-    public void sortNameList() {
-        Collections.sort(allSongsName, new Comparator<String>() {
+    protected void sortSongs(ArrayList<Song> songs) {
+        Collections.sort(songs, new Comparator<Song>() {
             @Override
-            public int compare(String song1, String song2) {
-                String artist1 = song1.split(" - ")[1];
-                String artist2 = song2.split(" - ")[1];
-                return artist1.compareToIgnoreCase(artist2);
+            public int compare(Song song1, Song song2) {
+                return song1.getArtist().compareToIgnoreCase(song2.getArtist());
             }
         });
     }

@@ -4,15 +4,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.main_page.SortedFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <TextView
+    <ListView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/tip"
-        android:textSize="@dimen/text_large"
-        android:id="@+id/song1"
-        android:layout_gravity="center"
-        android:textColor="@color/white" />
+        android:layout_height="match_parent"
+        android:id="@+id/titleListView"
+        android:layout_gravity="left|top" />
 </FrameLayout>
