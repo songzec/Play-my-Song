@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,15 +25,14 @@ import com.example.chens.PlaymySong.ui.settings.SettingActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link PlayingBottomFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link PlayingBottomFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Created by Xiao Ling on 2016/4/3.
+ *
+ * This fragment will show the current playing list.
  */
 public class PlayingBottomFragment extends Fragment {
 
@@ -58,6 +58,15 @@ public class PlayingBottomFragment extends Fragment {
     private PlayingLyricFragment lyricFragment;
     private OnFragmentInteractionListener mListener;
 
+    // seek bar
+    private SeekBar musicProcess;
+
+    // timer for update the seek bar
+    private Timer timer;
+    private TimerTask timerTask;
+
+    // make sure the seek bar will not be update when user move it
+    private boolean movingBar;
 
     public PlayingBottomFragment() {
         // Required empty public constructor
@@ -112,6 +121,12 @@ public class PlayingBottomFragment extends Fragment {
         // initialize list view
         listView = (ListView)view.findViewById(R.id.listView);
 
+        // initialize music seek bar
+        musicProcess = (SeekBar)view.findViewById(R.id.musicProcess);
+        musicProcess.setMax(280);
+
+        movingBar = false;
+
         // set buttons' listeners
         setting.setOnClickListener(settingClick);
         album.setOnClickListener(albumClick);
@@ -131,15 +146,40 @@ public class PlayingBottomFragment extends Fragment {
             }
         });
 
-
         // set on item click listener for list view
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 PlayingResource.currentSongPos = position;
                 playMusic();
+
             }
         });
+
+        // set listener for music seek bar
+        musicProcess.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+               // nothing
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                movingBar = true;
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                if (mediaPlayer != null) {
+                    int destPosition = seekBar.getProgress();
+                    int totalTime = mediaPlayer.getDuration();
+                    int maxLength = seekBar.getMax();
+                    mediaPlayer.seekTo(totalTime*destPosition/maxLength);
+                }
+                movingBar = false;
+            }
+        });
+
 
         if (PlayingResource.currentSongPos != -1) {
             playMusic();
@@ -264,11 +304,61 @@ public class PlayingBottomFragment extends Fragment {
         }
         mediaPlayer = new MediaPlayer();
         try {
+           // System.out.println("in try");
+
             mediaPlayer.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
             afd.close();
             mediaPlayer.prepare();
+            //System.out.println("start 1");
+
+            int totalTime = mediaPlayer.getDuration();
+            int totalTimeMin = totalTime / 1000 / 60;
+            int totalTimeSec = totalTime / 1000 - totalTimeMin * 60;
+
+            timePlayed.setText("0:00 / " + totalTimeMin + ":" + String.format("%02d", totalTimeSec));
+
             mediaPlayer.start();
+//            System.out.println("start 2");
+
+
+            timer = new Timer();
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    if(!movingBar) {
+                        int curTime = mediaPlayer.getCurrentPosition();
+                        int totalTime = mediaPlayer.getDuration();
+                        int maxLength = 280;
+                        double temp = (double)curTime / (double)totalTime * (double)maxLength;
+
+//                        System.out.println("max: " + maxLength);
+//                        System.out.println("curtime: " + curTime);
+
+                        musicProcess.setProgress((int)temp);
+                        final int curTimeMin = curTime / 1000 / 60;
+                        final int curTimeSec = curTime / 1000 - curTimeMin * 60;
+
+                        final int totalTimeMinCur = totalTime / 1000 / 60;
+                        final int totalTimeSecCur = totalTime / 1000 - totalTimeMinCur * 60;
+
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                timePlayed.setText(curTimeMin + ":"
+                                                    + String.format("%02d", curTimeSec)
+                                                    + " / " +  totalTimeMinCur + ":"
+                                                    + String.format("%02d", totalTimeSecCur));
+                            }
+                        });
+                    }
+                }
+            };
+            int step = 100;
+            timer.schedule(timerTask, 0, step);
+
+
             new Thread(lyricFragment.changeLyric).start();
+            //System.out.println("start 3");
 
         } catch (IOException e) {
             e.printStackTrace();
